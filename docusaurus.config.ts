@@ -71,6 +71,12 @@ const config: Config = {
           label: p.short,
           position: 'left' as const,
         })),
+        // Version selector for projects that have cut versions. Add one per versioned project.
+        {
+          type: 'docsVersionDropdown',
+          docsPluginId: 'bki',
+          position: 'right',
+        },
         {
           href: 'https://github.com/Beeps-Workshop',
           label: 'GitHub',
