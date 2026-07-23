@@ -4,6 +4,8 @@ title: Beep's Mean Crystalline Resource Machine
 sidebar_position: 1
 ---
 
+import AdUnit from '@site/src/components/AdUnit';
+
 ![The Resonator running with some crystals & modulators](https://cdn.modrinth.com/data/cached_images/edfd66b6ed8a1fd726c1be9cbb9e7d074d6b55ab.gif)
 
 **_Beep's Mean Crystalline Resource Machine (BMCRM) is a mod built around resonating crystals. Form blank crystals, infuse them with a resource, then let a Resonator put them to work._**
@@ -35,3 +37,7 @@ BMCRM does not depend on any mods directly, but **optionally integrates** with t
 - [JADE](https://modrinth.com/mod/jade) – Shows crystal information
 - [Create's Ponder](https://github.com/Creators-of-Create/Ponder) – All technical blocks have Ponders
 - [AlmostUnified](https://modrinth.com/mod/almostunified) – Respects any altered outputs
+
+---
+
+<AdUnit slot="REPLACE_WITH_BMCRM_LANDING_SLOT_ID" />

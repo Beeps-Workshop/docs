@@ -25,6 +25,16 @@ const config: Config = {
 
   i18n: {defaultLocale: 'en', locales: ['en']},
 
+  // AdSense loader only — no enable_page_level_ads call, so no Auto ads (incl. no overlay/anchor
+  // ads). Ad placement is manual: <ins class="adsbygoogle"> blocks added per-page + in the footer.
+  scripts: [
+    {
+      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6217402110753644',
+      async: true,
+      crossorigin: 'anonymous',
+    },
+  ],
+
   // No default docs instance — each project gets its own versioned instance below.
   presets: [
     [

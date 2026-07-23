@@ -1,3 +1,5 @@
+import AdUnit from '@site/src/components/AdUnit';
+
 # BetterKeepInventory 
 
 <center>
@@ -27,3 +29,7 @@ Using a rich rule-based configuration system you get fine control over exactly w
 ## BStats
 
 ![Plugin Statistics (Generated Image)](https://bstats.org/signatures/bukkit/BetterKeepInventory.svg)
+
+---
+
+<AdUnit slot="REPLACE_WITH_BKI_LANDING_SLOT_ID" />

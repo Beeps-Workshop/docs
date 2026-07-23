@@ -88,6 +88,19 @@
   flex: 1 1 auto;
 }
 
+/* Footer ad slot: sits between page content and the real footer, centered, capped so it
+   doesn't stretch full-width on wide screens. */
+.footer-ad-slot {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1rem 0;
+  background: var(--ifm-footer-background-color);
+}
+.footer-ad-slot .adsbygoogle {
+  width: 100%;
+  max-width: 728px;
+}
+
 /* --- Per-project docs version selectors ----------------------------------
    The navbar renders one version dropdown per versioned project — they can't be
    merged, since each is bound to its own docs instance. Docusaurus tags each

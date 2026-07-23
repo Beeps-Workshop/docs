@@ -1,7 +1,11 @@
 ---
 slug: /
 title: Beep's Other End
+sidebar_position: 1
 ---
+
+import AdUnit from '@site/src/components/AdUnit';
+
 **_A Mod that attempts to add new content to the end without ruining the desolate feel of the dimension._**
 
 ![A showcase of the blocks added by this mod in the 1.0 version](https://cdn.modrinth.com/data/SigAnrwo/images/d9fd8832b61f445e0675507be1aca946089d7e4a.png)
@@ -29,3 +33,7 @@ title: Beep's Other End
 ![A Screenshot of the shelters interior. A farm room and hallway can be seen.](https://cdn.modrinth.com/data/SigAnrwo/images/6d33d23e208d04e6873886ff461012d5b3351fb6.png)
 
 > The Shelter... A Place of safety now lies abandoned buried deep within the outer end isles. What things can be discovered here?
+
+---
+
+<AdUnit slot="REPLACE_WITH_BOE_LANDING_SLOT_ID" />
