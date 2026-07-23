@@ -39,3 +39,75 @@
 .project-card .card__body {
   flex: 1 1 auto;
 }
+
+/* Header banner: a fixed-ratio strip with a gradient placeholder behind it, so a
+   missing static/img/projects/<id>-header.png degrades gracefully instead of
+   showing a broken-image icon. */
+.project-card__media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--ifm-card-border-radius) var(--ifm-card-border-radius) 0 0;
+  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-darkest));
+}
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Title row: square icon badge (static/img/projects/<id>-icon.png) beside the name. */
+.project-card__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.project-card__head h3 {
+  margin: 0;
+}
+.project-card__icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Footer: docs button on top, store links in a row below. */
+.project-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.project-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.project-card__links .button {
+  flex: 1 1 auto;
+}
+
+/* --- Per-project docs version selectors ----------------------------------
+   The navbar renders one version dropdown per versioned project — they can't be
+   merged, since each is bound to its own docs instance. Docusaurus tags each
+   docs page's <html> with `plugin-id-<id>`, so we hide every version dropdown
+   by default and reveal only the one for the project currently being viewed.
+   On non-docs pages (e.g. the homepage) none are shown.
+   Add a new project's two lines here when you version it. */
+.navbar__item:has(> .navbar-version-dropdown),
+.menu__list-item:has(> .navbar-version-dropdown) {
+  display: none;
+}
+.plugin-id-bki .navbar__item:has(> .navbar-version-dropdown--bki),
+.plugin-id-bmcrm .navbar__item:has(> .navbar-version-dropdown--bmcrm),
+.plugin-id-boe .navbar__item:has(> .navbar-version-dropdown--boe),
+.plugin-id-fn .navbar__item:has(> .navbar-version-dropdown--fn) {
+  display: inline-block;
+}
+.plugin-id-bki .menu__list-item:has(> .navbar-version-dropdown--bki),
+.plugin-id-bmcrm .menu__list-item:has(> .navbar-version-dropdown--bmcrm),
+.plugin-id-boe .menu__list-item:has(> .navbar-version-dropdown--boe),
+.plugin-id-fn .menu__list-item:has(> .navbar-version-dropdown--fn) {
+  display: block;
+}

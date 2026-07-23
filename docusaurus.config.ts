@@ -52,9 +52,10 @@ const config: Config = {
       editUrl: ({versionDocsDirPath, docPath}) =>
         `https://github.com/Beeps-Workshop/docs/edit/main/${versionDocsDirPath}/${docPath}`,
     };
-    // BetterKeepInventory ships with imported version history (2.0.0 - 2.3.0).
-    if (p.id === 'bki') {
-      options.lastVersion = '2.3.0';
+    // Versioned projects: serve the last released version by default and label the
+    // editable current docs as unreleased "Snapshots" (see lastVersion in src/projects.ts).
+    if (p.lastVersion) {
+      options.lastVersion = p.lastVersion;
       options.versions = {current: {label: 'Snapshots', banner: 'unreleased'}};
     }
     return ['@docusaurus/plugin-content-docs', options];
@@ -67,20 +68,26 @@ const config: Config = {
       // TODO: add static/img/logo.png and uncomment:
       // logo: {alt: "Beep's Workshop", src: 'img/logo.png'},
       items: [
-        // Every project shown directly in the menu bar.
-        ...PROJECTS.map((p) => ({
-          type: 'docSidebar' as const,
-          sidebarId: 'docs',
-          docsPluginId: p.id,
-          label: p.short,
+        // Projects grouped into Mods / Plugins dropdowns (kind lives in src/projects.ts).
+        ...(['mod', 'plugin'] as const).map((kind) => ({
+          type: 'dropdown' as const,
+          label: kind === 'mod' ? 'Mods' : 'Plugins',
           position: 'left' as const,
+          items: PROJECTS.filter((p) => p.kind === kind).map((p) => ({
+            type: 'docSidebar' as const,
+            sidebarId: 'docs',
+            docsPluginId: p.id,
+            label: p.short,
+          })),
         })),
-        // Version selector for projects that have cut versions. Add one per versioned project.
-        {
-          type: 'docsVersionDropdown',
-          docsPluginId: 'bki',
-          position: 'right',
-        },
+        // One version selector per versioned project. Each is tagged with a class so
+        // custom.css can show only the one for the project you're currently viewing.
+        ...PROJECTS.filter((p) => p.lastVersion).map((p) => ({
+          type: 'docsVersionDropdown' as const,
+          docsPluginId: p.id,
+          position: 'right' as const,
+          className: `navbar-version-dropdown navbar-version-dropdown--${p.id}`,
+        })),
         {
           href: 'https://github.com/Beeps-Workshop',
           label: 'GitHub',
