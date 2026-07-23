@@ -1,6 +1,7 @@
 ---
 slug: /
 title: Beep's Mean Crystalline Resource Machine
+sidebar_position: 1
 ---
 
 ![The Resonator running with some crystals & modulators](https://cdn.modrinth.com/data/cached_images/edfd66b6ed8a1fd726c1be9cbb9e7d074d6b55ab.gif)

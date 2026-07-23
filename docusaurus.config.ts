@@ -97,7 +97,15 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      links: [],
+      links: [
+        {
+          title: 'More',
+          items: [
+            {label: 'Contact', to: '/contact'},
+            {label: 'Privacy Policy', to: '/privacy'},
+          ],
+        },
+      ],
       copyright: `Copyright © ${new Date().getFullYear()} Beep's Workshop.`,
     },
     prism: {

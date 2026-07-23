@@ -1,6 +1,7 @@
 ---
 slug: /
 title: FiniteNetherite
+sidebar_position: 1
 ---
 
 A Small plugin that attempts to nerf the **Netherite + Mending** combo.

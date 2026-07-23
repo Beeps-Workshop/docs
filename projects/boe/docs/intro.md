@@ -1,6 +1,7 @@
 ---
 slug: /
 title: Beep's Other End
+sidebar_position: 1
 ---
 **_A Mod that attempts to add new content to the end without ruining the desolate feel of the dimension._**
 
