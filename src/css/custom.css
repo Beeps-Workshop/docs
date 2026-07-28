@@ -74,52 +74,6 @@
 }
 
 /* Footer: docs button on top, store links in a row below. */
-/* Plugins render as a list rather than cards: no header art to show, so a full card would be a
-   gradient placeholder taking the space the mods earn with screenshots. */
-.project-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.project-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-}
-.project-row__text {
-  flex: 1 1 auto;
-  min-width: 0; /* lets long blurbs wrap instead of pushing the buttons off the row */
-}
-.project-row__text h3 {
-  margin: 0 0 0.15rem;
-  font-size: 1.05rem;
-}
-.project-row__text p {
-  margin: 0;
-  font-size: 0.9rem;
-  opacity: 0.75;
-}
-.project-row__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  flex: 0 0 auto;
-}
-
-/* Narrow screens: let the links drop under the text instead of squeezing it. */
-@media (max-width: 700px) {
-  .project-row {
-    flex-wrap: wrap;
-  }
-  .project-row__links {
-    width: 100%;
-  }
-  .project-row__links .button {
-    flex: 1 1 auto;
-  }
-}
-
 .project-card__actions {
   display: flex;
   flex-direction: column;
