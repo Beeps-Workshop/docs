@@ -63,6 +63,17 @@ export const PROJECTS: Project[] = [
     lastVersion: '1.0.1',
   },
   {
+    id: 'fnf',
+    label: 'Fixtures & Footnotes',
+    short: 'Fixtures & Footnotes',
+    kind: 'mod',
+    blurb: 'A Small decorative mod for you and yours', // from Modrinth
+    modrinth: 'https://modrinth.com/mod/fixtures-and-footnotes',
+    curseforge: 'https://www.curseforge.com/minecraft/mc-mods/fixtures-and-footnotes',
+    // No versioned docs cut yet, so `current` is what gets served. Freeze 1.0.0 with:
+    //   npm run docusaurus -- docs:version:fnf 1.0.0
+  },
+  {
     id: 'fn',
     label: 'FiniteNetherite',
     short: 'FiniteNetherite',
