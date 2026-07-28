@@ -48,7 +48,7 @@ export const PROJECTS: Project[] = [
     label: "Beep's Mean Crystalline Resource Machine",
     short: 'BMCRM',
     kind: 'mod',
-    blurb: '', // TODO: import from Modrinth once the project is approved (currently under review)
+    blurb: 'Yet another take on passive resource generation. Forge crystals and resonate them to obtain their spoils.', // from Modrinth
     modrinth: 'https://modrinth.com/mod/bmcrm',
     curseforge: 'https://www.curseforge.com/minecraft/mc-mods/beeps-mean-crystalline-resource-machine-bmcrm',
     lastVersion: '1.0.0', // placeholder — bmcrm is under review; adjust to its real release version
@@ -68,7 +68,7 @@ export const PROJECTS: Project[] = [
     label: 'BetterKeepInventory',
     short: 'BetterKeepInventory',
     kind: 'plugin',
-    blurb: '', // TODO: one-line description (Modrinth import skipped per request)
+    blurb: 'Take control of KeepInventory.', // from Modrinth
     modrinth: 'https://modrinth.com/mod/betterkeepinventory',
     curseforge: 'https://www.curseforge.com/minecraft/bukkit-plugins/betterkeepinventory',
     lastVersion: '2.3.0',

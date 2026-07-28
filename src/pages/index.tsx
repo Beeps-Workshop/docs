@@ -33,7 +33,6 @@ function ProjectCard({project}: {project: Project}): ReactNode {
         <Heading as="h3">{project.label}</Heading>
       </div>
       <div className="card__body">
-        {/* TODO: write a one-line blurb in src/projects.ts */}
         <p>{project.blurb}</p>
       </div>
       <div className="card__footer project-card__actions">
@@ -57,15 +56,63 @@ function ProjectCard({project}: {project: Project}): ReactNode {
   );
 }
 
-function ProjectSection({title, projects}: {title: string; projects: Project[]}): ReactNode {
+// Plugins get a compact row instead: no header art, one per line, links on the right. They have no
+// gallery screenshots to show, so a card would just be a gradient placeholder taking up the space
+// the mods earn with theirs.
+function ProjectRow({project}: {project: Project}): ReactNode {
+  return (
+    <div className="card project-row">
+      <img
+        className="project-card__icon"
+        src={projectIcon(project.id)}
+        alt=""
+        loading="lazy"
+        onError={hideIfMissing}
+      />
+      <div className="project-row__text">
+        <Heading as="h3">{project.label}</Heading>
+        {project.blurb && <p>{project.blurb}</p>}
+      </div>
+      <div className="project-row__links">
+        <Link className="button button--primary button--sm" to={`/${project.id}`}>
+          Read the docs
+        </Link>
+        {project.modrinth && (
+          <Link className="button button--secondary button--sm" href={project.modrinth}>
+            Modrinth
+          </Link>
+        )}
+        {project.curseforge && (
+          <Link className="button button--secondary button--sm" href={project.curseforge}>
+            CurseForge
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ProjectSection({
+  title,
+  projects,
+  variant = 'card',
+}: {
+  title: string;
+  projects: Project[];
+  variant?: 'card' | 'row';
+}): ReactNode {
   if (projects.length === 0) return null;
   return (
     <section style={{marginTop: '2.5rem'}}>
       <Heading as="h2">{title}</Heading>
-      <div className="project-grid">
-        {projects.map((p) => (
-          <ProjectCard key={p.id} project={p} />
-        ))}
+      <div className={variant === 'row' ? 'project-list' : 'project-grid'}>
+        {projects.map((p) =>
+          variant === 'row' ? (
+            <ProjectRow key={p.id} project={p} />
+          ) : (
+            <ProjectCard key={p.id} project={p} />
+          ),
+        )}
       </div>
     </section>
   );
@@ -86,7 +133,7 @@ export default function Home(): ReactNode {
 
       <main className="container" style={{padding: '1rem 0 3rem'}}>
         <ProjectSection title="Mods" projects={MODS} />
-        <ProjectSection title="Plugins" projects={PLUGINS} />
+        <ProjectSection title="Plugins" projects={PLUGINS} variant="row" />
       </main>
     </Layout>
   );
