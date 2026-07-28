@@ -6,6 +6,8 @@ sidebar_position: 2
 
 A net slung from the ceiling holding a single chest's worth of items — 27 slots.
 
+![Storage nets hung from a ceiling](/img/projects/fnf/ceiling-nets.png)
+
 ## Placing it
 Right-click the **underside** of a block. It's ceiling-mounted only; walls and floors won't take
 one.

@@ -37,6 +37,8 @@ biome like ordinary vines.
 
 **Shears** strip the vines back off and return the vine.
 
+![A slat wall with a doorway, vined on one side](/img/projects/fnf/slat-wall.png)
+
 ## Crafting
 Slats are cut on a **stonecutter**, eight at a time. A log cuts into all three of that wood's slat
 variants directly, so you don't have to strip or plank it first; stripped logs and planks each cut

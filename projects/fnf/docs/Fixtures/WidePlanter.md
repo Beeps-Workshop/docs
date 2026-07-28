@@ -19,6 +19,8 @@ boundary.
 Planters are exactly one block wide, so a row of them on a straight wall joins into a continuous
 planter box with no gaps.
 
+![Two planters meeting with no gap between them](/img/projects/fnf/planters-row.png)
+
 ## Planting
 The trough has three slots across it. Right-click the third you want:
 
@@ -26,6 +28,8 @@ The trough has three slots across it. Right-click the third you want:
 - **On a filled third** takes that plant back, whatever you're holding.
 
 It accepts flowers, saplings and crops, plus cactus, bamboo, sea pickles and sweet berries.
+
+![Planters of wheat either side of a chest](/img/projects/fnf/planters-crops.png)
 
 Anything that grows is shown at full size — a slot holding wheat seeds displays as grown wheat
 rather than a bare sprout, and sweet berries appear ripe. Two-block plants like sunflowers, rose
