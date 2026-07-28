@@ -31,6 +31,8 @@ One item places two different things depending on what you aim at:
 
 Slats have no collision, so you can walk straight through them.
 
+![Slats mounted on blocks, seen from overhead](/img/projects/fnf/slats-overhead.png)
+
 ## Vines
 Use a **Vine** on slats to grow them over, for an overgrown look. The overlay is tinted to the
 biome like ordinary vines.
