@@ -4,13 +4,12 @@ sidebar_position: 1
 
 # Slats
 
-Modern slat panelling, in 39 variants.
+Modern slat paneling, in many variants.
 
 ![All the slats](https://cdn.modrinth.com/data/giBTRDbb/images/2c40d95c10d78d5a5de8607a563c3ebb8dd6cdc2.png)
 
 ## Variants
-Every wood comes in three materials — log or stem, stripped, and planks — across oak, spruce,
-birch, jungle, acacia, dark oak, mangrove, cherry, crimson, warped and bamboo.
+Slats come in every wood variant; Log, Stripped Log & Planks.
 
 Beyond the woods there are six more that keep their source block's properties, so the bright ones
 still give off light:
@@ -18,18 +17,18 @@ still give off light:
 - Glowstone
 - Sea Lantern
 - Ochre, Verdant and Pearlescent Froglight
-- Magma — still damages you, and still wants a pickaxe
+- Magma (still damages you, and still wants a pickaxe)
 
-## Placing them
-One item places two different things depending on what you aim at:
+## Placing Slats
+Slats can be placed in two different ways, depending on where you click:
 
 - **A wall** gives wall-hugging slats, which work like vines. Each face is independent, so a
   one-block-thick wall can carry slats on both sides, and you can build a panel up a wall face by
   face.
 - **A floor or ceiling** gives a standing screen instead, which runs along whichever axis you're
-  facing — useful as a room partition or a railing.
+  facing.
 
-Slats have no collision, so you can walk straight through them.
+Wall Slats have no collision, so you can walk straight through them.
 
 ![Slats mounted on blocks, seen from overhead](/img/projects/fnf/slats-overhead.png)
 
