@@ -66,7 +66,22 @@ const config: Config = {
     // editable current docs as unreleased "Snapshots" (see lastVersion in src/projects.ts).
     if (p.lastVersion) {
       options.lastVersion = p.lastVersion;
-      options.versions = {current: {label: 'Snapshots', banner: 'unreleased'}};
+
+      // Only the default (last released) version is indexed. Every other version is a near-identical
+      // copy of the same page at a different URL, so leaving them crawlable splits ranking signals
+      // and risks an old version outranking the current one. Note Docusaurus' "current" is the
+      // *editable, unreleased* Snapshots docs here, not the served default — the canonical version
+      // is lastVersion, which is the only one left indexable.
+      const versionsFile = path.join(__dirname, `${p.id}_versions.json`);
+      const frozen: string[] = fs.existsSync(versionsFile)
+        ? JSON.parse(fs.readFileSync(versionsFile, 'utf8'))
+        : [];
+      options.versions = {
+        current: {label: 'Snapshots', banner: 'unreleased', noIndex: true},
+        ...Object.fromEntries(
+          frozen.filter((v) => v !== p.lastVersion).map((v) => [v, {noIndex: true}]),
+        ),
+      };
     }
     return ['@docusaurus/plugin-content-docs', options];
   }),
