@@ -17,4 +17,4 @@ You should also skim trough the `latest.log` file located in the `logs` folder o
 
 ## Still having issues?
 
-Feel free to join the [Discord](https://discord.gg/fFvFXPvtty) for help! Just `#create-a-ticket` and i’ll help you out!
+Feel free to join the [Discord](https://beepsterr.com/discord) for help! Just `#create-a-ticket` and i’ll help you out!

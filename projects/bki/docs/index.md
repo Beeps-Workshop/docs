@@ -6,7 +6,7 @@ import AdUnit from '@site/src/components/AdUnit';
 ![Better Keep Inventory Banner](/img/header.png)
 
 [![Documentation button](/img/buttons/documentation.png)](https://bki.beepsterr.com/)
-[![Support button](/img/buttons/support.png)](https://leafcat.live/discord)
+[![Support button](/img/buttons/support.png)](https://beepsterr.com/discord)
 [![Snapshots Button](/img/buttons/snapshots.png)](https://github.com/BeepSterr/BetterKeepInventory/actions/workflows/build_snapshot.yml)
 </center>
 
