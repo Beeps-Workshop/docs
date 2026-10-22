@@ -51,46 +51,11 @@ If true, the item's enchantments (like Unbreaking) will be taken into account wh
 ```yml
 filters:
   items:
-    - "SHEARS"
-    - "G:RESOURCES"
+    - "*"
+    - "!G:EQUIPMENT"
   slots:
     - "ALL"
 ```
 
 Allows you to make sure the effect only applies to certain items based on various criteria.
-<details>
-<summary><strong>Filter options</strong></summary>
-
-### Items
-```yaml
-items:
-  - "SHEARS"
-  - "G:RESOURCES"
-```
-A List of items that are affected by this effects.
-Defaults to all items.
-
-Supports [Resource Lists](../../Types/ResourceLists.md) for item groups.
-
-### Slots
-```yaml
-slots:
-  - "ALL"
-```
-A list of slots that are affected by this effect.
-Defaults to all slots.
-
-### Name
-```yaml
-name:
-  - '!Crate Key'
-```
-A String or list of strings for item names that the affected item must have. Supports `!` to negate the filter.
-
-### Lore
-```yaml
-lore:
-  - 'Dropped on death'
-```
-A String or list of strings for item lore lines that the affected item must have. Supports `!` to negate the filter.
-</details>
+See [Filters](../Filters.md) for all filter options and more examples.

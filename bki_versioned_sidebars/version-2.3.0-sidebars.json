@@ -9,6 +9,7 @@
       "label": "Rules",
       "items": [
         "Rules/Intro",
+        "Rules/Filters",
         {
           "type": "category",
           "label": "Examples",
