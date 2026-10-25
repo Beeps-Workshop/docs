@@ -17,6 +17,8 @@
   "dependencies": {
     "@docusaurus/core": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
+    "@lunega/analytics": "^0.0.1",
+    "@lunega/app": "^0.0.3",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
@@ -38,5 +40,11 @@
   },
   "engines": {
     "node": ">=18.0"
+  },
+  "lunega": {
+    "static": "build",
+    "analytics": {
+      "websiteId": "4c82f42f-708f-48b4-8bb9-d9fccc39e3b9"
+    }
   }
 }

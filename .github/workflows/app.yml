@@ -1,0 +1,17 @@
+name: app
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  app:
+    uses: lunega-dev/lunega-app/.github/workflows/app.yml@main
+    with:
+      user: beeps
