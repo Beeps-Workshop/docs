@@ -1,3 +1,6 @@
+---
+description: "Every BetterKeepInventory command and permission node, including the permission groups for players and admins."
+---
 # Commands & Permissions
 
 ## Commands

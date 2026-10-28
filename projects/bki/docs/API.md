@@ -1,3 +1,6 @@
+---
+description: "Add your own conditions and effects to BetterKeepInventory with its Java API."
+---
 # Developer API
 BetterKeepInventory exposes a API to allow other plugins to extend its features.
 

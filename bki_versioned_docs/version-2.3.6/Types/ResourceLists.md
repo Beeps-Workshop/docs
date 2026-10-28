@@ -1,3 +1,6 @@
+---
+description: "Item groups like G:EQUIPMENT and G:RESOURCES, and how to select every item or exclude items in BetterKeepInventory filters."
+---
 # Resource Lists
 Wherever a list of items is accepted, you can use the following resource groups to refer to them or a group of items
 

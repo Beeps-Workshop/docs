@@ -1,3 +1,6 @@
+---
+description: "How BetterKeepInventory rules work: conditions decide when a rule applies, effects decide what happens, and child rules build on their parent."
+---
 # About Rules
 Rules are the bread and butter of BetterKeepInventory. They allow you to customize exactly what happens on player death based on a variety of conditions and effects.
 Rules can be very complex, so don't be afraid to check out the [Examples](../Rules/Examples/Teams.md) section for inspiration!

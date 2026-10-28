@@ -1,8 +1,11 @@
+---
+description: "How to install BetterKeepInventory on a Spigot, Paper, Purpur or Folia server, and which Minecraft and Java versions it needs."
+---
 # Installing
 
 ## Requirements
-- Java 17 or higher
-- A Minecraft Server running either Spigot, Paper, PurPur or Folia
+- Java 21 or higher
+- A Minecraft 1.21 or newer server (including 26.x) running Spigot, Paper, Purpur or Folia
 - [BetterKeepInventory](https://modrinth.com/plugin/betterkeepinventory) plugin jar file
 
 ## Installation Steps

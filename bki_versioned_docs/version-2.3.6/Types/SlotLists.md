@@ -1,3 +1,6 @@
+---
+description: "Inventory slot names like ARMOR, HOTBAR and OFFHAND for BetterKeepInventory's slot filters."
+---
 # Slot Lists
 Wherever a list of items is accepted, you can use the following resource groups to refer to them or a group of items
 

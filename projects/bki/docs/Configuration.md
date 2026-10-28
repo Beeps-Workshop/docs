@@ -1,3 +1,6 @@
+---
+description: "The settings in BetterKeepInventory's config.yml: the default death behavior, update notifications, debug mode and rules."
+---
 # Basic Configuration
 This section provides an overview of the basic configuration options available for setting up your application. It covers essential settings that you need to configure to get started.
 

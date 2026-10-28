@@ -7,6 +7,7 @@ const sidebars: SidebarsConfig = {
   docs: [
     'index',
     'Installing',
+    'FAQ',
     'Troubleshooting',
     'Configuration',
     'Commands',

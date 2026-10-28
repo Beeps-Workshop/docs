@@ -1,3 +1,6 @@
+---
+description: "Fix BetterKeepInventory rules that don't do what you expect, and use the debug tools to see how the plugin handled a death."
+---
 # Troubleshooting
 If you're having troubles with getting the plugin to work follow the following steps:
 :::info
