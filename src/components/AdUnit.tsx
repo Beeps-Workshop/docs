@@ -9,6 +9,9 @@ declare global {
   }
 }
 
+/** Ads are off for now. Flipping this back also needs the loader script in docusaurus.config.ts. */
+export const ADS_ENABLED = false;
+
 export type AdUnitProps = {
   /** The ad unit's data-ad-slot id from AdSense. Use a placeholder until units are approved. */
   slot: string;
@@ -19,7 +22,7 @@ export default function AdUnit({slot, className}: AdUnitProps): ReactNode {
   const pushed = useRef(false);
 
   useEffect(() => {
-    if (pushed.current) return;
+    if (!ADS_ENABLED || pushed.current) return;
     pushed.current = true;
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -27,6 +30,8 @@ export default function AdUnit({slot, className}: AdUnitProps): ReactNode {
       // Blocked by an ad blocker, or the AdSense script hasn't loaded yet — nothing to do.
     }
   }, []);
+
+  if (!ADS_ENABLED) return null;
 
   return (
     <ins

@@ -2,7 +2,7 @@ import type {ReactNode} from 'react';
 import type {WrapperProps} from '@docusaurus/types';
 import Footer from '@theme-original/Footer';
 import type FooterType from '@theme/Footer';
-import AdUnit from '@site/src/components/AdUnit';
+import AdUnit, {ADS_ENABLED} from '@site/src/components/AdUnit';
 
 type Props = WrapperProps<typeof FooterType>;
 
@@ -11,9 +11,11 @@ type Props = WrapperProps<typeof FooterType>;
 export default function FooterWrapper(props: Props): ReactNode {
   return (
     <>
-      <div className="footer-ad-slot">
-        <AdUnit slot="REPLACE_WITH_FOOTER_SLOT_ID" />
-      </div>
+      {ADS_ENABLED && (
+        <div className="footer-ad-slot">
+          <AdUnit slot="REPLACE_WITH_FOOTER_SLOT_ID" />
+        </div>
+      )}
       <Footer {...props} />
     </>
   );
