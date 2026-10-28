@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     blurb: 'Take control of KeepInventory.', // from Modrinth
     modrinth: 'https://modrinth.com/mod/betterkeepinventory',
     curseforge: 'https://www.curseforge.com/minecraft/bukkit-plugins/betterkeepinventory',
-    lastVersion: '2.3.0',
+    lastVersion: '2.3.6',
   },
   {
     id: 'fn',

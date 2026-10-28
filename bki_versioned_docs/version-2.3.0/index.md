@@ -3,7 +3,7 @@
 <center>
 ![Better Keep Inventory Banner](/img/header.png)
 
-[![Documentation button](/img/buttons/documentation.png)](https://bki.beepsterr.com/)
+[![Documentation button](/img/buttons/documentation.png)](https://workshop.beepsterr.com/bki/)
 [![Support button](/img/buttons/support.png)](https://beepsterr.com/discord)
 [![Snapshots Button](/img/buttons/snapshots.png)](https://github.com/BeepSterr/BetterKeepInventory/actions/workflows/build_snapshot.yml)
 </center>
@@ -21,7 +21,7 @@ Using a rich rule-based configuration system you get fine control over exactly w
 - ✅ **Apply Durability Damage**
 - ✅ **Re-apply hunger level**
 - ✅ **Take Money from players**
-- ✅ **Expandable via the [Developer API](https://github.com/BeepSterr/BetterKeepInventory?tab=readme-ov-file#developer-api)**
+- ✅ **Expandable via the [Developer API](https://workshop.beepsterr.com/bki/API)**
 - ✅ **Supports Spigot, Paper & Folia**
 
 ## BStats

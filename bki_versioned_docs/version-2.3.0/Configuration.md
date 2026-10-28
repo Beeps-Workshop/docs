@@ -37,7 +37,7 @@ What channel to use when checking for plugin updated. Must be one of the followi
 Stable releases are normal releases that have been marked as stable after being available for a month without critical issues.
 :::
 
-The Update Checker will check for a new version on server start, and once every 12 hours thereafter. If a new version is found, a message will be logged to the console and any player who logs in with the `betterkeepinventory.notify` permission will receive a message.
+The Update Checker will check for a new version on server start, and once every 12 hours thereafter. If a new version is found, a message will be logged to the console and any player who logs in with the `betterkeepinventory.version.notify` permission will receive a message.
 
 ### debug
 ```yaml

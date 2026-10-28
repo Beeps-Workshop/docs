@@ -4,6 +4,7 @@
     "Installing",
     "Troubleshooting",
     "Configuration",
+    "Commands",
     {
       "type": "category",
       "label": "Rules",

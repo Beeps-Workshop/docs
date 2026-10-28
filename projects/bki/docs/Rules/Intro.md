@@ -36,7 +36,7 @@ A list of conditions that must be met for the rule to apply. Other plugins can u
           - "DIAMOND"
       ...
 ```
-A list of conditions that must be met for the rule to apply. Other plugins can use the API to add additional conditions. Please use `/betterkeepinventory registry conditions` to see a list of available conditions for your specific server.
+A list of effects that are applied when the rule's conditions are met. Other plugins can use the API to add additional effects. Please use `/betterkeepinventory registry effects` to see a list of available effects for your specific server.
 
 ### children
 ```yaml

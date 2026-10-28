@@ -9,6 +9,7 @@ const sidebars: SidebarsConfig = {
     'Installing',
     'Troubleshooting',
     'Configuration',
+    'Commands',
     {
       type: 'category',
       label: 'Rules',

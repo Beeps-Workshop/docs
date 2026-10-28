@@ -23,6 +23,6 @@ rules:
             - "G:TOOLS"
             - "G:WEAPONS"   # <-- Drop any tools & weapons the player has
           name:
-            - '!Soulbound'  # <-- Unless they have "Soulbound" in the name
+            - '!*Soulbound*'  # <-- Unless they have "Soulbound" in the name
 
 ```

@@ -16,7 +16,7 @@ The easiest way to get a hold of the API is to use JitPack. Just add your depend
         <!-- Keep not that we're using the 'betterkeepinventory-api' artifact -->
         <groupId>com.github.BeepSterr.BetterKeepInventory</groupId>
         <artifactId>betterkeepinventory-api</artifactId>
-        <version>v2.0.0</version>
+        <version>v2.3.5</version>
         <!-- You should not shade the API, but use it as a provided dependency -->
         <!-- If you don't do this, you will not be able to register anything -->
         <scope>provided</scope>
@@ -37,7 +37,7 @@ public static class AlwaysTrueCondition implements Condition {
     }
 
     @Override
-    public boolean check(Player player, PlayerDeathEvent deathEvent, PlayerRespawnEvent respawnEvent) {
+    public boolean check(Player player, PlayerDeathEvent deathEvent, PlayerRespawnEvent respawnEvent, LoggerInterface logger) {
         return true;
     }
 }
@@ -64,12 +64,12 @@ public static class BroadcastEffect implements Effect {
     }
 
     @Override
-    public void onRespawn(Player player, PlayerRespawnEvent event) {
+    public void onRespawn(Player player, PlayerRespawnEvent event, LoggerInterface logger) {
         // This effect doesn't do anything on respawn (yet)
     }
 
     @Override
-    public void onDeath(Player ply, PlayerDeathEvent event) {
+    public void onDeath(Player ply, PlayerDeathEvent event, LoggerInterface logger) {
         plugin.getServer().broadcastMessage(ply.getName() + " died a gruesome death.");
     }
 }
