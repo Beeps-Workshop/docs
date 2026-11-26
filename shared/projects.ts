@@ -1,9 +1,9 @@
 // Single source of truth for the projects in the docs hub.
-// Imported by both docusaurus.config.ts (docs instances + navbar) and the homepage.
+// Imported by shared/index.ts (navbar, accent colour) and the homepage.
 export type ProjectKind = 'mod' | 'plugin';
 
 export type Project = {
-  /** Short URL slug + docs instance id + folder name under projects/. */
+  /** Short URL slug (the instance is served at /<id>/) + folder name under projects/. */
   id: string;
   /** Full display name (homepage cards). */
   label: string;
@@ -17,12 +17,14 @@ export type Project = {
   modrinth?: string;
   /** Optional CurseForge project page. Leave undefined to hide the button. */
   curseforge?: string;
-  /**
-   * Latest released docs version (e.g. '1.0.1'). When set, that version is the
-   * default served docs and `current` becomes the unreleased "Snapshots".
-   * Cut a new one with:  npm run docusaurus -- docs:version:<id> <version>
-   */
-  lastVersion?: string;
+  /** GitHub repo (owner/name) holding the project and its docs/ instance. */
+  repo: string;
+  /** Branch of `repo` the docs are built from. */
+  branch: string;
+  /** Private repo: no "edit this page" links. */
+  private: boolean;
+  /** Hex colour for the project's Infima primary, in light and dark mode. */
+  accent: string;
 };
 
 /** Wide banner across the top of a project's homepage card. Add static/img/projects/<id>-header.png. */
@@ -40,8 +42,10 @@ export const PROJECTS: Project[] = [
     blurb: 'A Small decorative mod for you and yours', // from Modrinth
     modrinth: 'https://modrinth.com/mod/fixtures-and-footnotes',
     curseforge: 'https://www.curseforge.com/minecraft/mc-mods/fixtures-footnotes',
-    // No versioned docs cut yet, so `current` is what gets served. Freeze 1.0.0 with:
-    //   npm run docusaurus -- docs:version:fnf 1.0.0
+    repo: 'Beeps-Workshop/FixturesAndFootnotes',
+    branch: 'main',
+    private: false,
+    accent: '#2e8555', // TODO accent
   },
   {
     id: 'bmcrm',
@@ -51,7 +55,10 @@ export const PROJECTS: Project[] = [
     blurb: 'Yet another take on passive resource generation. Forge crystals and resonate them to obtain their spoils.', // from Modrinth
     modrinth: 'https://modrinth.com/mod/bmcrm',
     curseforge: 'https://www.curseforge.com/minecraft/mc-mods/beeps-mean-crystalline-resource-machine-bmcrm',
-    lastVersion: '1.0.0', // placeholder — bmcrm is under review; adjust to its real release version
+    repo: 'Beeps-Workshop/bmcrm',
+    branch: 'main',
+    private: false,
+    accent: '#2e8555', // TODO accent
   },
   {
     id: 'boe',
@@ -61,7 +68,10 @@ export const PROJECTS: Project[] = [
     blurb: 'An-other take on a end content mod. Preferring to keep the end barren.', // from Modrinth
     modrinth: 'https://modrinth.com/mod/beeps-other-end',
     curseforge: 'https://www.curseforge.com/minecraft/mc-mods/beeps-other-end',
-    lastVersion: '1.0.1',
+    repo: 'Beeps-Workshop/beeps-other-end',
+    branch: 'main',
+    private: true,
+    accent: '#2e8555', // TODO accent
   },
   {
     id: 'bki',
@@ -71,7 +81,10 @@ export const PROJECTS: Project[] = [
     blurb: 'Take control of KeepInventory.', // from Modrinth
     modrinth: 'https://modrinth.com/mod/betterkeepinventory',
     curseforge: 'https://www.curseforge.com/minecraft/bukkit-plugins/betterkeepinventory',
-    lastVersion: '2.3.6',
+    repo: 'Beeps-Workshop/BetterKeepInventory',
+    branch: 'master',
+    private: false,
+    accent: '#2e8555', // TODO accent
   },
   {
     id: 'fn',
@@ -81,7 +94,10 @@ export const PROJECTS: Project[] = [
     blurb: 'Nerf Netherite + Mending', // from Modrinth
     modrinth: 'https://modrinth.com/mod/finitenetherite',
     curseforge: 'https://www.curseforge.com/minecraft/bukkit-plugins/finitenetherite',
-    lastVersion: '1.0.1',
+    repo: 'Beeps-Workshop/FiniteNetherite',
+    branch: 'master',
+    private: false,
+    accent: '#2e8555', // TODO accent
   },
 ];
 

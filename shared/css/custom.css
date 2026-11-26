@@ -1,6 +1,8 @@
 /**
- * Global styles. The classic template bundles Infima. Override its variables here.
- * Palette is the Docusaurus default for now — retheme to taste.
+ * Global styles for every instance, loaded by the workshop plugin (shared/index.ts).
+ * The classic template bundles Infima. Override its variables here.
+ * Palette is the Docusaurus default for now — retheme to taste. A project instance
+ * overrides the primary shades below with its own accent (see accentCss in shared/index.ts).
  */
 :root {
   --ifm-color-primary: #2e8555;
@@ -99,28 +101,4 @@
 .footer-ad-slot .adsbygoogle {
   width: 100%;
   max-width: 728px;
-}
-
-/* --- Per-project docs version selectors ----------------------------------
-   The navbar renders one version dropdown per versioned project — they can't be
-   merged, since each is bound to its own docs instance. Docusaurus tags each
-   docs page's <html> with `plugin-id-<id>`, so we hide every version dropdown
-   by default and reveal only the one for the project currently being viewed.
-   On non-docs pages (e.g. the homepage) none are shown.
-   Add a new project's two lines here when you version it. */
-.navbar__item:has(> .navbar-version-dropdown),
-.menu__list-item:has(> .navbar-version-dropdown) {
-  display: none;
-}
-.plugin-id-bki .navbar__item:has(> .navbar-version-dropdown--bki),
-.plugin-id-bmcrm .navbar__item:has(> .navbar-version-dropdown--bmcrm),
-.plugin-id-boe .navbar__item:has(> .navbar-version-dropdown--boe),
-.plugin-id-fn .navbar__item:has(> .navbar-version-dropdown--fn) {
-  display: inline-block;
-}
-.plugin-id-bki .menu__list-item:has(> .navbar-version-dropdown--bki),
-.plugin-id-bmcrm .menu__list-item:has(> .navbar-version-dropdown--bmcrm),
-.plugin-id-boe .menu__list-item:has(> .navbar-version-dropdown--boe),
-.plugin-id-fn .menu__list-item:has(> .navbar-version-dropdown--fn) {
-  display: block;
 }

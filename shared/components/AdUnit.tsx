@@ -2,14 +2,14 @@ import type {ReactNode} from 'react';
 import {useEffect, useRef} from 'react';
 
 // AdSense fills the <ins> tag once we push to the adsbygoogle queue — this only ever runs
-// client-side, after the tag is already in the DOM (see docusaurus.config.ts for the loader script).
+// client-side, after the tag is already in the DOM (see shared/index.ts for the loader script).
 declare global {
   interface Window {
     adsbygoogle?: unknown[];
   }
 }
 
-/** Ads are off for now. Flipping this back also needs the loader script in docusaurus.config.ts. */
+/** Ads are off for now. Flipping this back also needs the loader script in shared/index.ts. */
 export const ADS_ENABLED = false;
 
 export type AdUnitProps = {

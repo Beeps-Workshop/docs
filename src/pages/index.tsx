@@ -2,7 +2,8 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
-import {MODS, PLUGINS, projectHeader, projectIcon, type Project} from '@site/src/projects';
+import {MODS, PLUGINS, projectHeader, projectIcon, type Project} from '@site/shared/projects';
+import {crossInstanceLink} from '@site/shared/links';
 
 // Missing images are hidden so the gradient placeholder behind them shows through
 // instead of a broken-image icon.
@@ -40,7 +41,7 @@ function ProjectCard({project, header = true}: {project: Project; header?: boole
         <p>{project.blurb}</p>
       </div>
       <div className="card__footer project-card__actions">
-        <Link className="button button--primary button--block" to={`/${project.id}`}>
+        <Link className="button button--primary button--block" {...crossInstanceLink(`/${project.id}/`)}>
           Read the docs
         </Link>
         <div className="project-card__links">
