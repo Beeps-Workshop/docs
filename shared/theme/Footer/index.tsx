@@ -11,13 +11,13 @@ export default function Footer(): ReactNode {
   return (
     <footer className={styles.footer}>
       <div className={styles.row}>
-        <span className={styles.title}>Beep's Workshop</span>
+        <span className={styles.title}>Beeps' Workshop</span>
         <nav aria-label="Footer" className={styles.links}>
           <Link {...crossInstanceLink('/terms')}>Terms</Link>
           <Link {...crossInstanceLink('/privacy')}>Privacy</Link>
           <Link {...crossInstanceLink('/ai')}>AI</Link>
         </nav>
-        <span className={styles.copyright}>Copyright © {new Date().getFullYear()} Beep's Workshop</span>
+        <span className={styles.copyright}>Copyright © {new Date().getFullYear()} Beeps' Workshop</span>
       </div>
       {SPONSORS.length > 0 && (
         <div className={styles.sponsors}>

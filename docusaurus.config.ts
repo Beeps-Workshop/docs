@@ -8,7 +8,7 @@ import {newsPlugin} from './shared/news';
 // The main instance: the front page, the blog and the static pages (terms, privacy, ai). Each project's docs are their own
 // instance under /<id>/. The shared look (navbar, footer, css, url, baseUrl) comes from withWorkshop.
 export default withWorkshop({
-  title: "Beep's Workshop",
+  title: "Beeps' Workshop",
   tagline: '', // TODO: your tagline (used in <meta>); homepage copy lives in src/pages/index.tsx
   favicon: undefined, // TODO: add static/img/favicon.ico and set this to 'img/favicon.ico'
 
@@ -40,7 +40,7 @@ export default withWorkshop({
         blog: {
           routeBasePath: 'blog',
           blogTitle: 'news',
-          blogDescription: 'Updates, releases and the occasional ramble from the workshop.',
+          blogDescription: 'New releases, versions and general ramblings from a madgal',
           blogSidebarTitle: 'recent posts',
           blogSidebarCount: 5,
           tags: 'tags.yml',
