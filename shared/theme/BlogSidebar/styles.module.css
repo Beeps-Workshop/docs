@@ -1,0 +1,70 @@
+/* Per the Blog artboard's sidebar. */
+.sidebar {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 2rem);
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  overflow-y: auto;
+}
+
+.heading {
+  margin: 0 0 10px 12px;
+  font-size: 18px;
+  color: var(--text3);
+}
+.recent + .heading {
+  margin-top: 28px;
+}
+
+.list {
+  margin: 0;
+}
+
+.link {
+  display: block;
+  padding: 8px 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text2);
+  text-decoration: none;
+}
+.link:hover {
+  background: var(--surface2);
+  color: var(--ink);
+  text-decoration: none;
+}
+.linkActive,
+.linkActive:hover {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: inset 4px 0 0 var(--link);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0 12px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+/* Phone: the recent posts are in the navbar menu; the chips sit above the posts. */
+@media (max-width: 996px) {
+  .sidebar {
+    position: static;
+    max-height: none;
+    margin-bottom: 28px;
+  }
+  .recent {
+    display: none;
+  }
+  .heading {
+    margin-top: 0 !important;
+  }
+}

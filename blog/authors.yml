@@ -1,0 +1,5 @@
+# Post authors, referenced by key in a post's front matter (`authors: beepsterr`).
+# TODO: add image_url and socials.
+beepsterr:
+  name: Beepsterr
+  page: true

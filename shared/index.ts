@@ -68,8 +68,8 @@ function navbar(project: Project | undefined, versioned: boolean, right: NavbarI
         ...(news ? [news] : []),
       ]
     : [
-        // Plain links (crossInstanceLink) for now: the link checks would flag both until the new
-        // homepage (#projects) and the blog (/blog) exist.
+        // Plain links (crossInstanceLink), which the link checks skip: #projects until the new
+        // homepage has it; /blog for good, since the blog plugin creates it only once a post exists.
         {label: 'projects', ...crossInstanceLink('/#projects')},
         {label: 'news', ...crossInstanceLink('/blog')},
         {label: 'github', href: 'https://github.com/Beeps-Workshop', className: 'pbtn px'},
@@ -90,11 +90,14 @@ function navbar(project: Project | undefined, versioned: boolean, right: NavbarI
 }
 
 /**
- * The project's "News" link (to its blog tag page), placed after the version dropdown, or null while
- * the project has no posts. Hook for the blog task; until then no project gets one.
+ * The project's "News" link (to its blog tag page on the main site), placed after the version
+ * dropdown, or null while the project's tag has no posts, as the tag page exists only then.
+ * WORKSHOP_NEWS_TAGS (comma-separated tag keys) comes from scripts/build.mjs, which reads it from the
+ * main build (shared/news.ts); a project built or previewed alone has none, so no News link.
  */
-function newsLink(_projectId: string): NavbarItem | null {
-  return null;
+function newsLink(projectId: string): NavbarItem | null {
+  const tags = (process.env.WORKSHOP_NEWS_TAGS ?? '').split(',');
+  return tags.includes(projectId) ? {label: 'News', ...crossInstanceLink(`/blog/tags/${projectId}`)} : null;
 }
 
 // Self-hosted fonts (no Google Fonts request): Pixelify Sans for --font-display, Inter for

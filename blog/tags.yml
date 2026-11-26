@@ -1,0 +1,29 @@
+# Every tag a post may use (onInlineTags: 'throw' rejects any other). Each gets its page and feeds at
+# /blog/tags/<key>. Project tags use the project's id as key and its `short` name (shared/projects.ts)
+# as label; the blog colours them in the project's accent.
+
+# Projects
+bki:
+  label: BetterKeepInventory
+bmcrm:
+  label: BMCRM
+boe:
+  label: Beep's Other End
+fn:
+  label: FiniteNetherite
+fnf:
+  label: Fixtures & Footnotes
+workshop:
+  label: Workshop
+
+# Post types
+release:
+  label: Release
+support:
+  label: Support
+shout-out:
+  label: Shout-out
+writing:
+  label: Writing
+announcement:
+  label: Announcement

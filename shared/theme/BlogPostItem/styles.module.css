@@ -1,0 +1,85 @@
+/* A post in a list, per the Blog artboard. */
+.card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 28px;
+  background: var(--surface);
+}
+
+.image {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 28px 26px;
+}
+
+/* date · read time; the date in the pixel font. The info's own margin-vert--md is !important. */
+.info > div {
+  margin: 0 !important;
+}
+.info {
+  font-size: 14px;
+  color: var(--text3);
+}
+.info time {
+  font-family: var(--font-display);
+}
+
+.title {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.1;
+}
+.title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.title a:hover {
+  color: var(--link);
+}
+
+.excerpt {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text1);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.readMore {
+  margin-left: auto;
+  padding: 10px 16px;
+  font-size: 15px;
+}
+
+@media (max-width: 576px) {
+  .body {
+    padding: 20px 18px 22px;
+  }
+  .title {
+    font-size: 26px;
+  }
+}
