@@ -407,8 +407,16 @@ div.workshop-color-toggle {
   padding: 0 var(--home-gutter) 48px;
   box-sizing: border-box;
 }
-.home-news__heading {
+/* "updates" on the left, "all posts >" right-aligned with the boxes' edge, both on one baseline. */
+.home-news__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
   margin: 0 0 14px;
+}
+.home-news__heading {
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 26px;
@@ -416,7 +424,9 @@ div.workshop-color-toggle {
 .home-news__all {
   display: inline-flex;
   align-items: center;
-  font-size: 18px;
+  align-self: center;
+  font-weight: 600;
+  font-size: 16px;
 }
 .home-news__grid {
   display: grid;

@@ -46,16 +46,17 @@ function NewsRow(): ReactNode {
   if (latest.length === 0) return null;
   return (
     <section id="news" className="home-news" aria-labelledby="home-news-heading">
-      <h2 id="home-news-heading" className="home-news__heading">
-        <span>updates</span>
-        <span aria-hidden="true"> · </span>
+      <div className="home-news__head">
+        <h2 id="home-news-heading" className="home-news__heading">
+          updates
+        </h2>
         <Link to="/blog" className="home-news__all">
           all posts
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path d={mdiChevronRight} fill="currentColor" />
           </svg>
         </Link>
-      </h2>
+      </div>
       <div className="home-news__grid">
         {latest.map((post) => (
           <NewsBox key={post.permalink} post={post} />
