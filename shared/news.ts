@@ -33,6 +33,7 @@ export function newsPlugin(_context: LoadContext): Plugin {
       const news: WorkshopNews = {
         latest: blog.blogPosts
           .filter((post) => !post.metadata.unlisted)
+          .sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
           .slice(0, LATEST_COUNT)
           .map(({metadata}) => ({
             title: metadata.title,

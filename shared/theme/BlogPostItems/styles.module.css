@@ -1,0 +1,31 @@
+/* The blog list's heading, per the Blog artboard (the same values in dark mode). */
+.header {
+  margin-bottom: 28px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Decorative pixel progress bar. */
+.bar {
+  display: flex;
+  height: 10px;
+  max-width: 260px;
+  margin-top: 14px;
+  background: var(--inverse);
+}
+.fill {
+  width: 64%;
+  background: #7CE01A;
+}
+
+.description {
+  margin: 16px 0 0;
+  font-size: 17px;
+  color: var(--text2);
+}

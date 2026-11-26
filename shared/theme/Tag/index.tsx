@@ -6,7 +6,8 @@ import styles from './styles.module.css';
 
 // Replaces the classic Tag (posts' and docs' tag lists, the tags pages) with a pixel chip. A blog tag
 // named after a project (blog/tags.yml: /blog/tags/<id>) is tinted in that project's accent and
-// carries its icon.
+// carries its icon. Not a wrap: the classic Tag's Link has no slot for the chip's style or icon, so it
+// is rewritten with the same props and href.
 export default function Tag({permalink, label, count, description}: Props): ReactNode {
   const project = PROJECTS.find((p) => permalink.endsWith(`/blog/tags/${p.id}`));
   return (

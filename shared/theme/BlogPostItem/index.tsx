@@ -25,7 +25,7 @@ function BlogPostCard(): ReactNode {
   const imageUrl = useBaseUrl(image ?? '');
   return (
     <article className={`${styles.card} px`}>
-      {image && <div className={styles.image} style={{backgroundImage: `url(${imageUrl})`}} />}
+      {image && <div className={styles.image} style={{backgroundImage: `url(${JSON.stringify(imageUrl)})`}} />}
       <div className={styles.body}>
         <div className={styles.info}>
           <BlogPostItemHeaderInfo />

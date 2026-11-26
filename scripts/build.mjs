@@ -51,12 +51,14 @@ for (const {id} of PROJECTS) {
 
 // Builds the main instance and returns the blog tags that have posts, which its news plugin
 // (shared/news.ts) writes to WORKSHOP_NEWS_FILE. A project gets a News link only if its id is one.
+// The temp folder is removed before any failure is reported (fail() exits at once).
 function buildMain() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'workshop-news-'));
   const file = path.join(dir, 'tags.json');
-  build(root, path.join(root, 'build'), {WORKSHOP_NEWS_FILE: file});
-  const tags = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
+  const ok = run(root, path.join(root, 'build'), {WORKSHOP_NEWS_FILE: file});
+  const tags = ok && fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
   fs.rmSync(dir, {recursive: true, force: true});
+  if (!ok) fail('build of main instance failed');
   if (!tags) fail('the main build did not write the blog tags (shared/news.ts)');
   return tags;
 }
@@ -65,6 +67,11 @@ function buildMain() {
 // would be shared between them, and it hands one instance another's resolved @generated modules (all
 // project pages came out as the main site's 404). The builds are small, so the cache is simply off.
 function build(siteDir, outDir, env) {
+  if (!run(siteDir, outDir, env)) fail(`build of ${path.relative(root, siteDir) || 'main instance'} failed`);
+}
+
+/** Runs one instance's build; true if it succeeded. */
+function run(siteDir, outDir, env) {
   // A stale generated folder has caused false broken-link errors, so every build starts clean.
   fs.rmSync(path.join(siteDir, '.docusaurus'), {recursive: true, force: true});
   const result = spawnSync(process.execPath, [docusaurus, 'build', siteDir, '--out-dir', outDir], {
@@ -72,7 +79,7 @@ function build(siteDir, outDir, env) {
     stdio: 'inherit',
     env: {...cleanEnv, DOCUSAURUS_NO_PERSISTENT_CACHE: '1', ...env},
   });
-  if (result.status !== 0) fail(`build of ${path.relative(root, siteDir) || 'main instance'} failed`);
+  return result.status === 0;
 }
 
 // robots.txt is generated rather than kept in static/ so the per-project sitemaps (each instance

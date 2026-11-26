@@ -20,10 +20,15 @@ export default function BlogSidebar({sidebar}: Props): ReactNode {
   if (!sidebar?.items.length) return null;
   const projects = PROJECTS.filter((p) => tags.includes(p.id));
   const workshop = tags.includes('workshop');
+  const hasChips = projects.length > 0 || workshop;
   return (
     <aside className="col col--3">
       {windowSize === 'mobile' && <BlogSidebarMobile sidebar={sidebar} />}
-      <nav className={clsx(styles.sidebar, 'thin-scrollbar')} aria-label="Blog navigation">
+      {/* On a phone the nav shows only the chips (the recent posts are hidden), so without chips it
+          would be an empty gap. */}
+      <nav
+        className={clsx(styles.sidebar, !hasChips && styles.noChips, 'thin-scrollbar')}
+        aria-label="Blog navigation">
         <div className={styles.recent}>
           <h2 className={styles.heading}>{sidebar.title}</h2>
           <BlogSidebarItemList
@@ -33,7 +38,7 @@ export default function BlogSidebar({sidebar}: Props): ReactNode {
             linkActiveClassName={styles.linkActive}
           />
         </div>
-        {(projects.length > 0 || workshop) && (
+        {hasChips && (
           <>
             <h2 className={styles.heading}>by project</h2>
             <ul className={clsx(styles.tags, 'clean-list')}>

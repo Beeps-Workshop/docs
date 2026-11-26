@@ -67,4 +67,7 @@
   .heading {
     margin-top: 0 !important;
   }
+  .noChips {
+    display: none;
+  }
 }
