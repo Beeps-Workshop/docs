@@ -30,19 +30,6 @@ export function withWorkshop(config: Config, opts: WorkshopOptions = {}): Config
       ...config.themeConfig,
       colorMode: {respectPrefersColorScheme: true},
       navbar: navbar(project, isVersioned(config), opts.right ?? []),
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'More',
-            items: [
-              {label: 'Contact', ...crossInstanceLink('/contact')},
-              {label: 'Privacy Policy', ...crossInstanceLink('/privacy')},
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} Beep's Workshop.`,
-      },
       prism: {
         additionalLanguages: ['java', 'yaml'],
         theme: prismThemes.github,

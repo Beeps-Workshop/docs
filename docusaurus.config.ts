@@ -4,7 +4,7 @@ import {withWorkshop} from './shared';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
-// The main instance: the front page, contact and privacy. Each project's docs are their own
+// The main instance: the front page and the static pages (terms, privacy, ai). Each project's docs are their own
 // instance under /<id>/. The shared look (navbar, footer, css, url, baseUrl) comes from withWorkshop.
 export default withWorkshop({
   title: "Beep's Workshop",
@@ -23,6 +23,8 @@ export default withWorkshop({
   onBrokenLinks: 'throw',
 
   i18n: {defaultLocale: 'en', locales: ['en']},
+
+  plugins: [['@docusaurus/plugin-client-redirects', {redirects: [{from: '/contact', to: '/terms#contact'}]}]],
 
   presets: [
     [
