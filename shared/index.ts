@@ -103,12 +103,15 @@ export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Pl
 }
 
 /**
- * Infima's primary colour and its six shades, in light and dark mode, from one hex. The shades
- * follow Docusaurus' own colour generator (HSL lightness scaled by 10/15/30%). The selectors are
- * more specific than custom.css's `:root` / `[data-theme='dark']`, since stylesheets load after
- * these head tags.
+ * Infima's primary colour and its six shades for light and dark mode. The shades follow Docusaurus'
+ * own colour generator (HSL lightness scaled by 10/15/30%). The selectors are more specific than
+ * custom.css's `:root` / `[data-theme='dark']`, since stylesheets load after these head tags.
  */
-export function accentCss(accent: string): string {
+export function accentCss(accent: Project['accent']): string {
+  return `html:root { ${primaryVars(accent.light)} } html[data-theme='dark'] { ${primaryVars(accent.dark)} }`;
+}
+
+function primaryVars(hex: string): string {
   const vars = [
     ['', 0],
     ['-dark', -0.1],
@@ -118,8 +121,7 @@ export function accentCss(accent: string): string {
     ['-lighter', 0.15],
     ['-lightest', 0.3],
   ] as const;
-  const body = vars.map(([suffix, amount]) => `--ifm-color-primary${suffix}: ${shade(accent, amount)};`).join(' ');
-  return `html:root, html[data-theme='dark'] { ${body} }`;
+  return vars.map(([suffix, amount]) => `--ifm-color-primary${suffix}: ${shade(hex, amount)};`).join(' ');
 }
 
 /** Scales the colour's HSL lightness by (1 + amount), like `Color(hex).lighten(amount)`. */

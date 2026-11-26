@@ -23,8 +23,8 @@ export type Project = {
   branch: string;
   /** Private repo: no "edit this page" links. */
   private: boolean;
-  /** Hex colour for the project's Infima primary, in light and dark mode. */
-  accent: string;
+  /** Hex colours (#rrggbb) for the project's Infima primary in light and dark mode. */
+  accent: {light: string; dark: string};
 };
 
 /** Wide banner across the top of a project's homepage card. Add static/img/projects/<id>-header.png. */
@@ -45,7 +45,7 @@ export const PROJECTS: Project[] = [
     repo: 'Beeps-Workshop/FixturesAndFootnotes',
     branch: 'main',
     private: false,
-    accent: '#2e8555', // TODO accent
+    accent: {light: '#2e8555', dark: '#25c2a0'}, // TODO accent
   },
   {
     id: 'bmcrm',
@@ -58,7 +58,7 @@ export const PROJECTS: Project[] = [
     repo: 'Beeps-Workshop/bmcrm',
     branch: 'main',
     private: false,
-    accent: '#2e8555', // TODO accent
+    accent: {light: '#2e8555', dark: '#25c2a0'}, // TODO accent
   },
   {
     id: 'boe',
@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     repo: 'Beeps-Workshop/beeps-other-end',
     branch: 'main',
     private: true,
-    accent: '#2e8555', // TODO accent
+    accent: {light: '#2e8555', dark: '#25c2a0'}, // TODO accent
   },
   {
     id: 'bki',
@@ -84,7 +84,7 @@ export const PROJECTS: Project[] = [
     repo: 'Beeps-Workshop/BetterKeepInventory',
     branch: 'master',
     private: false,
-    accent: '#2e8555', // TODO accent
+    accent: {light: '#2e8555', dark: '#25c2a0'}, // TODO accent
   },
   {
     id: 'fn',
@@ -97,7 +97,7 @@ export const PROJECTS: Project[] = [
     repo: 'Beeps-Workshop/FiniteNetherite',
     branch: 'master',
     private: false,
-    accent: '#2e8555', // TODO accent
+    accent: {light: '#2e8555', dark: '#25c2a0'}, // TODO accent
   },
 ];
 
