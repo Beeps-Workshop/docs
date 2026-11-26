@@ -10,7 +10,7 @@ export const NEWS_PLUGIN = 'workshop-news';
 export type NewsPost = {title: string; date: string; permalink: string; summary: string};
 
 export type WorkshopNews = {
-  /** The newest listed posts, newest first (at most LATEST_COUNT). */
+  /** The newest listed non-patch posts, newest first (at most LATEST_COUNT). */
   latest: NewsPost[];
   /** Keys (tags.yml) of the tags with at least one listed post, so with a /blog/tags/<key> page. */
   tags: string[];
@@ -30,7 +30,8 @@ export function newsPlugin(_context: LoadContext): Plugin {
       if (!blog) throw new Error(`${NEWS_PLUGIN}: the blog plugin is not loaded`);
       const news: WorkshopNews = {
         latest: blog.blogPosts
-          .filter((post) => !post.metadata.unlisted)
+          // Imported patch releases (`patch: true` in the front matter) stay in the blog but not in the boxes.
+          .filter((post) => !post.metadata.unlisted && post.metadata.frontMatter.patch !== true)
           .sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
           .slice(0, LATEST_COUNT)
           .map(({metadata}) => ({

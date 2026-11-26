@@ -1,6 +1,6 @@
-// Imports one blog post per minor release series from each project's Modrinth page into
-// blog/releases/<id>-<major>-<minor>.md. Patch releases are left out, and so are alpha and beta
-// versions (on purpose: snapshots and betas are not releases). It only adds posts that are
+// Imports one blog post per release version (patches included) from each project's Modrinth page into
+// blog/releases/<id>-<major>-<minor>-<patch>.md. Alpha and beta versions are left out
+// (on purpose: snapshots and betas are not releases). It only adds posts that are
 // missing: an existing file is never changed or deleted, so a post can be edited after import.
 //
 //   npm run import-releases                 write every missing post
@@ -14,7 +14,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const USER_AGENT = 'beeps-workshop-docs-importer';
 const RELEASES_DIR = 'blog/releases';
 
-/** Major and minor from the first `a.b` pair in a version string (`v2.3.0`, `2.3.0+1.21`), or null. */
+/** Major, minor and patch from the first `a.b[.c]` group in a version string (`v2.3.0`, `2.3.0+1.21`), or null. */
 function parseVersion(versionNumber) {
   const match = /(\d+)\.(\d+)(?:\.(\d+))?/.exec(versionNumber);
   if (!match) return null;
@@ -30,35 +30,27 @@ const compareGameVersions = (a, b) => a.localeCompare(b, 'en', {numeric: true});
 const union = (lists) => [...new Set(lists.flat())];
 
 /**
- * One release per `major.minor`: its `x.y.0` version (a bare `x.y` counts as `x.y.0`), else the
- * earliest of that minor by `date_published`. Builds of the same base version (`1.0.0+fabric`,
- * `1.0.0+neoforge`) merge into one release: the union of loaders and game versions, a build per link
- * in `builds`, and the first non-empty changelog. Alpha/beta versions and unparseable ones are skipped
- * on purpose. Each result is the first build plus `major`, `minor`, `loaders`, `game_versions`, `builds`.
+ * One release per `major.minor.patch` (a bare `x.y` counts as `x.y.0`). Builds of the same version
+ * (`1.0.0+fabric`, `1.0.0+neoforge`) merge into one release: the union of loaders and game versions,
+ * a build per link in `builds`, the first non-empty changelog, and the earliest build's date. Alpha/beta
+ * versions and unparseable ones are skipped on purpose. Each result is the earliest build plus `major`,
+ * `minor`, `patch`, `loaders`, `game_versions`, `builds`.
  */
-export function pickMinorReleases(versions) {
-  const series = new Map();
+export function pickReleases(versions) {
+  const groups = new Map();
   for (const version of versions) {
     if (version.version_type && version.version_type !== 'release') continue;
     const parsed = parseVersion(version.version_number);
     if (!parsed) continue;
-    const base = version.version_number.replace(/\+.*$/, '');
-    const minorKey = `${parsed.major}.${parsed.minor}`;
-    if (!series.has(minorKey)) series.set(minorKey, new Map());
-    const bases = series.get(minorKey);
-    if (!bases.has(base)) bases.set(base, {patch: parsed.patch, builds: []});
-    bases.get(base).builds.push(version);
+    const key = `${parsed.major}.${parsed.minor}.${parsed.patch}`;
+    if (!groups.has(key)) groups.set(key, {parsed, builds: []});
+    groups.get(key).builds.push(version);
   }
-  return [...series.entries()].map(([minorKey, bases]) => {
-    const groups = [...bases.values()].map((g) => ({...g, builds: g.builds.sort(byDate)}));
-    const groupDate = (g) => g.builds[0];
-    const zero = groups.filter((g) => g.patch === 0).sort((x, y) => byDate(groupDate(x), groupDate(y)));
-    const {builds} = (zero.length ? zero : groups.sort((x, y) => byDate(groupDate(x), groupDate(y))))[0];
-    const [major, minor] = minorKey.split('.').map(Number);
+  return [...groups.values()].map(({parsed, builds}) => {
+    builds.sort(byDate);
     return {
       ...builds[0],
-      major,
-      minor,
+      ...parsed,
       changelog: builds.map((b) => b.changelog).find((c) => c && c.trim()) ?? '',
       loaders: union(builds.map((b) => b.loaders)).sort(),
       game_versions: union(builds.map((b) => b.game_versions)).sort(compareGameVersions),
@@ -96,7 +88,7 @@ function neutraliseMdx(markdown) {
 
 const demoteHeading = (line) => line.replace(/^( {0,3})(#{1,5})(?=\s)/, '$1$2#');
 
-const postPath = (project, release) => `${RELEASES_DIR}/${project.id}-${release.major}-${release.minor}.md`;
+const postPath = (project, release) => `${RELEASES_DIR}/${project.id}-${release.major}-${release.minor}-${release.patch}.md`;
 
 /** The post for one release: {path (relative to the repo root), contents}. */
 export function postFile(project, release) {
@@ -113,8 +105,9 @@ export function postFile(project, release) {
     modrinth,
   ].join('\n\n');
   const frontMatter = [
-    `title: ${JSON.stringify(`${project.label} ${release.major}.${release.minor}`)}`,
+    `title: ${JSON.stringify(`${project.label} ${release.major}.${release.minor}.${release.patch}`)}`,
     `date: ${new Date(release.date_published).toISOString()}`,
+    ...(release.patch > 0 ? ['patch: true'] : []),
     `tags: [${project.id}, release]`,
     'authors: [beepsterr]',
     'imported: modrinth',
@@ -150,7 +143,7 @@ export async function main(argv, {fetch: fetchFn = fetch, root: repoRoot = root,
   const blogDir = path.join(repoRoot, RELEASES_DIR);
   let count = 0;
   for (const project of all.filter((p) => p.modrinthSlug && (!only || p.id === only))) {
-    const releases = pickMinorReleases(await fetchVersions(project.modrinthSlug, fetchFn));
+    const releases = pickReleases(await fetchVersions(project.modrinthSlug, fetchFn));
     for (const release of missingPosts(project, releases, blogDir)) {
       const {path: file, contents} = postFile(project, release);
       log(`${dryRun ? 'would write' : 'write'} ${file}`);
