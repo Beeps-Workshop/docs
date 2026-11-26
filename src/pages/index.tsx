@@ -9,14 +9,10 @@ import {crossInstanceLink} from '@site/shared/links';
 import {useWorkshopNews} from '@site/shared/useWorkshopNews';
 import type {NewsPost} from '@site/shared/news';
 
-// The main site's homepage (spec: workshop restyle, Homepage): the hero with the latest news beside
-// it, a pixel divider, then a card per project linking to its docs.
+// The main site's homepage (spec: workshop restyle, Homepage): the hero, the latest updates in three boxes,
+// then a card per project linking to its docs.
 
 const HERO_LINE = 'Minecraft mods, server plugins and assorted tinkering. Docs and downloads for all of it.';
-
-// One step of the divider's zigzag (88px wide, back to the starting height), after a lead-in.
-const DIVIDER_PATH =
-  'M0 10 h8 v-4 h8 v-4 h16' + ' v4 h8 v4 h16 v4 h8 v4 h16 v-4 h8 v-4 h8 v-4 h8 v-4 h16'.repeat(24);
 
 /** A CSS url() for an image path, with the base URL. Shown as a background, a missing file leaves
  * only the box's own colour instead of a broken-image icon. */
@@ -24,40 +20,47 @@ function useImageUrl(path: string): string {
   return `url(${JSON.stringify(useBaseUrl(path))})`;
 }
 
-function NewsItem({post}: {post: NewsPost}): ReactNode {
+const DATE_FORMAT = new Intl.DateTimeFormat('en', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'});
+
+// The post's calendar date, formatted in UTC so the build and the client agree.
+function NewsBox({post}: {post: NewsPost}): ReactNode {
   return (
-    <Link to={post.permalink} className="home-news__post">
-      <time className="home-news__date" dateTime={post.date}>
-        {post.date.slice(0, 10)}
+    <Link to={post.permalink} className="home-news__box">
+      <span className="home-news__title">{post.title}</span>
+      <time className="home-news__date" dateTime={post.date.slice(0, 10)}>
+        {DATE_FORMAT.format(new Date(post.date))}
       </time>
-      <span className="home-news__text">
-        <span className="home-news__title">{post.title}</span>
-        {post.summary && <span className="home-news__summary">{post.summary}</span>}
+      <span className="home-news__more" aria-hidden="true">
+        Read more
+        <svg viewBox="0 0 24 24" width="20" height="20">
+          <path d={mdiChevronRight} fill="currentColor" />
+        </svg>
       </span>
     </Link>
   );
 }
 
-/** The newest posts beside the hero, or nothing while the blog has none (/blog exists only then). */
-function NewsStrip(): ReactNode {
+/** The newest posts as three boxes under the hero, or nothing while the blog has none (/blog exists only then). */
+function NewsRow(): ReactNode {
   const {latest} = useWorkshopNews();
   if (latest.length === 0) return null;
   return (
     <section id="news" className="home-news" aria-labelledby="home-news-heading">
-      <div className="home-news__head">
-        <h2 id="home-news-heading" className="home-news__heading">
-          news
-        </h2>
+      <h2 id="home-news-heading" className="home-news__heading">
+        <span>updates</span>
+        <span aria-hidden="true"> · </span>
         <Link to="/blog" className="home-news__all">
           all posts
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path d={mdiChevronRight} fill="currentColor" />
           </svg>
         </Link>
+      </h2>
+      <div className="home-news__grid">
+        {latest.map((post) => (
+          <NewsBox key={post.permalink} post={post} />
+        ))}
       </div>
-      {latest.map((post) => (
-        <NewsItem key={post.permalink} post={post} />
-      ))}
     </section>
   );
 }
@@ -69,18 +72,23 @@ function ProjectCard({project}: {project: Project}): ReactNode {
   const icon = useImageUrl(projectIcon(project.id));
   const withHeader = project.kind === 'mod';
   const tagStyle = projectTagStyle(project.id) as CSSProperties;
+  // On a card with header art the tag sits over the art's top-right corner; otherwise in the top row.
+  const kind = (
+    <span className="home-card__kind ptag" style={tagStyle}>
+      {project.kind}
+    </span>
+  );
   return (
     <Link className={`home-card pcard${withHeader ? ' home-card--header' : ''}`} {...crossInstanceLink(`/${project.id}/`)}>
       {withHeader && (
         <span className="home-card__header" style={{...tagStyle, backgroundImage: header}} aria-hidden="true" />
       )}
+      {withHeader && kind}
       <span className="home-card__top">
         <span className="home-card__icon-frame">
           <span className="home-card__icon" style={{backgroundImage: icon}} aria-hidden="true" />
         </span>
-        <span className="home-card__kind ptag" style={tagStyle}>
-          {project.kind}
-        </span>
+        {!withHeader && kind}
       </span>
       <span className="home-card__body">
         <span className="home-card__name">{project.label}</span>
@@ -100,20 +108,15 @@ export default function Home(): ReactNode {
         <section className="home-hero">
           <div className="home-hero__intro">
             <h1 className="home-hero__title">
-              Beep&apos;s
+              Beeps&apos;
               <br />
               Workshop
             </h1>
             <p className="home-hero__line">{HERO_LINE}</p>
           </div>
-          <NewsStrip />
         </section>
 
-        <div className="home-divider" aria-hidden="true">
-          <svg width="2144" height="20" viewBox="0 0 2144 20" shapeRendering="crispEdges">
-            <path d={DIVIDER_PATH} fill="none" strokeWidth="3" />
-          </svg>
-        </div>
+        <NewsRow />
 
         <section id="projects" className="home-projects" aria-labelledby="home-projects-heading">
           <h2 id="home-projects-heading" className="home-projects__heading">

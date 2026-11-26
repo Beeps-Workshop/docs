@@ -358,12 +358,11 @@ div.workshop-color-toggle {
 }
 
 
-/* Homepage (src/pages/index.tsx): hero + news strip, divider, project cards. */
+/* Homepage (src/pages/index.tsx): hero, news boxes, project cards. */
 .home {
   --home-gutter: 32px;
 }
 .home-hero,
-.home-divider,
 .home-projects {
   max-width: 1180px;
   margin: 0 auto;
@@ -371,17 +370,19 @@ div.workshop-color-toggle {
   padding-right: var(--home-gutter);
   box-sizing: border-box;
 }
+/* Left-aligned intro; the room to its right is for a future "featured" block. */
 .home-hero {
   display: flex;
   flex-wrap: wrap;
   gap: 36px;
   align-items: center;
-  padding-top: 40px;
-  padding-bottom: 48px;
+  padding-top: 48px;
+  padding-bottom: 44px;
 }
 .home-hero__intro {
-  flex: 1 1 400px;
+  flex: 0 1 560px;
   min-width: 0;
+  text-align: left;
 }
 .home-hero__title {
   margin: 0;
@@ -399,95 +400,82 @@ div.workshop-color-toggle {
   color: var(--text2);
 }
 
-/* News strip: dark in both modes. */
+/* News: a heading row, then three dark boxes (--inverse in both modes) that lift like cards. */
 .home-news {
-  --focus-ring: var(--on-inverse);
-  flex: 1 1 480px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 26px 28px 24px;
-  background: var(--inverse);
-  color: var(--on-inverse);
-}
-.home-news__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 8px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--home-gutter) 48px;
+  box-sizing: border-box;
 }
 .home-news__heading {
-  margin: 0;
+  margin: 0 0 14px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 26px;
-  color: var(--on-inverse);
 }
 .home-news__all {
   display: inline-flex;
   align-items: center;
-  padding: 8px 0;
-  font-family: var(--font-display);
-  font-size: 16px;
-  color: var(--accent-pop);
+  font-size: 18px;
 }
-.home-news__all:hover {
-  color: var(--accent-pop);
+.home-news__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
-.home-news__post {
-  display: flex;
-  gap: 16px;
-  align-items: baseline;
-  padding: 14px 0;
-  border-top: 2px dashed #3A3A42;
-  color: var(--on-inverse);
-  text-decoration: none;
-}
-.home-news__post:last-child {
-  padding-bottom: 0;
-}
-.home-news__post:hover {
-  color: var(--on-inverse);
-  text-decoration: none;
-}
-.home-news__date {
-  flex-shrink: 0;
-  width: 84px;
-  font-family: var(--font-display);
-  font-size: 15px;
-  color: #8C8C96;
-}
-.home-news__text {
+.home-news__box {
+  --focus-ring: var(--on-inverse);
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+  gap: 6px;
+  padding: 22px 24px;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.home-news__box:hover,
+.home-news__box:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(27 27 31 / 12%);
+  color: var(--on-inverse);
+  text-decoration: none;
+}
+[data-theme='dark'] .home-news__box:hover,
+[data-theme='dark'] .home-news__box:focus-visible {
+  background: color-mix(in srgb, var(--inverse) 94%, #FFFFFF);
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-news__box {
+    transition: none;
+  }
+  .home-news__box:hover,
+  .home-news__box:focus-visible {
+    transform: none;
+  }
 }
 .home-news__title {
   font-family: var(--font-display);
   font-size: 20px;
   font-weight: 700;
+  line-height: 1.25;
 }
-.home-news__post:hover .home-news__title,
-.home-news__post:focus-visible .home-news__title {
+.home-news__date {
+  display: block;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--on-inverse-muted);
+}
+.home-news__more {
+  display: inline-flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 14px;
+  font-family: var(--font-display);
+  font-size: 16px;
   color: var(--accent-pop);
-}
-.home-news__summary {
-  font-size: 14px;
-  line-height: 1.45;
-  color: #C9C9D1;
-}
-
-/* Pixel zigzag between the hero and the projects. */
-.home-divider {
-  overflow: hidden;
-  height: 20px;
-  margin-bottom: 40px;
-}
-.home-divider path {
-  stroke: var(--line);
 }
 
 .home-projects {
@@ -509,6 +497,7 @@ div.workshop-color-toggle {
    missing image leaves the project-tinted strip or an empty square instead of a broken-image icon.
    (Icons have transparency, so the square gets no backdrop of its own.) */
 .home-card {
+  position: relative;
   display: flex;
   flex-direction: column;
 }
@@ -545,6 +534,16 @@ div.workshop-color-toggle {
 .home-card__kind {
   padding: 3px 8px;
 }
+/* Over the header art: top-right corner, the tint made opaque (--surface underneath) and a shadow
+   so it reads on any image. */
+.home-card--header > .home-card__kind {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  background: linear-gradient(var(--tag-bg), var(--tag-bg)), var(--surface);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+}
 .home-card__body {
   display: flex;
   flex-direction: column;
@@ -572,7 +571,10 @@ div.workshop-color-toggle {
     padding-bottom: 36px;
   }
   .home-news {
-    padding: 22px 20px 20px;
+    padding-bottom: 32px;
+  }
+  .home-news__grid {
+    grid-template-columns: 1fr;
   }
 }
 

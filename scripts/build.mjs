@@ -3,7 +3,6 @@
 // Docusaurus empties its out dir; the project builds only add build/<id> next to it.
 import {spawnSync} from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 
@@ -21,15 +20,9 @@ try {
 
 const SITE_URL = 'https://workshop.beepsterr.com';
 
-// No build inherits these from the caller's shell: the first two would turn the main build into a
-// project instance, the others are set below for the builds that need them.
-const {
-  DOCS_BASE_URL: _baseUrl,
-  WORKSHOP_SHARED: _shared,
-  WORKSHOP_NEWS_FILE: _newsFile,
-  WORKSHOP_NEWS_TAGS: _newsTags,
-  ...cleanEnv
-} = process.env;
+// No build inherits these from the caller's shell: they would turn the main build into a project
+// instance (both are set below for the project builds).
+const {DOCS_BASE_URL: _baseUrl, WORKSHOP_SHARED: _shared, ...cleanEnv} = process.env;
 
 // Check every project before building anything, so a missing source never half-builds.
 for (const {id} of PROJECTS) {
@@ -38,29 +31,14 @@ for (const {id} of PROJECTS) {
   if (!fs.existsSync(path.join(dir, 'docusaurus.config.ts'))) fail(`project '${id}': projects/${id}/docusaurus.config.ts is missing`);
 }
 
-const newsTags = buildMain();
+build(root, path.join(root, 'build'), {});
 writeRobots();
 for (const {id} of PROJECTS) {
   build(path.join(root, 'projects', id), path.join(root, 'build', id), {
     DOCS_BASE_URL: `/${id}/`,
     WORKSHOP_SHARED: shared,
-    WORKSHOP_NEWS_TAGS: newsTags.join(','),
   });
   checkProjectBuild(id);
-}
-
-// Builds the main instance and returns the blog tags that have posts, which its news plugin
-// (shared/news.ts) writes to WORKSHOP_NEWS_FILE. A project gets a News link only if its id is one.
-// The temp folder is removed before any failure is reported (fail() exits at once).
-function buildMain() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'workshop-news-'));
-  const file = path.join(dir, 'tags.json');
-  const ok = run(root, path.join(root, 'build'), {WORKSHOP_NEWS_FILE: file});
-  const tags = ok && fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
-  fs.rmSync(dir, {recursive: true, force: true});
-  if (!ok) fail('build of main instance failed');
-  if (!tags) fail('the main build did not write the blog tags (shared/news.ts)');
-  return tags;
 }
 
 // Every instance runs from this folder, so webpack's persistent cache (node_modules/.cache/webpack)

@@ -4,7 +4,6 @@ import type {Config, LoadContext, Plugin} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import type {NavbarItem} from '@docusaurus/theme-common';
 import {PROJECTS, type Project} from './projects';
-import {crossInstanceLink} from './links';
 
 // The look every workshop instance shares (the main site and each project's docs): navbar, footer,
 // prism, colour mode, custom.css and the swizzled theme components (theme/). Runs in Node.js at config time.
@@ -57,27 +56,19 @@ function findProject(projectId: string | undefined): Project | undefined {
 }
 
 // Left: the title (to / from every instance, see theme/Logo), then on a project instance
-// `/ <project ▾> <version ▾> News`, on the main site the workshop nav. Right: the project's own items
+// `/ <project ▾> <version ▾>`, on the main site nothing. Right: the project's own items
 // as pixel buttons; theme/Navbar/Content adds the colour toggle and the Ko-fi heart after them.
 function navbar(project: Project | undefined, versioned: boolean, right: NavbarItem[]): Preset.ThemeConfig['navbar'] {
-  const news = project && newsLink(project.id);
   const left: NavbarItem[] = project
     ? [
         {type: 'custom-projectDropdown', projectId: project.id},
         ...(versioned ? [{type: 'docsVersionDropdown', className: 'workshop-navbar__version'}] : []),
-        ...(news ? [news] : []),
       ]
-    : [
-        // A homepage section, not a page: never shown as the current one (no pathname is empty).
-        {label: 'projects', to: '/#projects', activeBaseRegex: '^$'},
-        // A plain link (crossInstanceLink), which the link checks skip, since the blog plugin creates
-        // /blog only once a post exists.
-        {label: 'news', ...crossInstanceLink('/blog')},
-      ];
+    : [];
   return {
-    title: "Beep's Workshop",
+    title: "Beeps' Workshop",
     // TODO: add static/img/logo.png and uncomment:
-    // logo: {alt: "Beep's Workshop", src: 'img/logo.png'},
+    // logo: {alt: "Beeps' Workshop", src: 'img/logo.png'},
     items: [
       ...left.map((item) => ({...item, position: 'left' as const})),
       ...right.map((item) => ({
@@ -87,17 +78,6 @@ function navbar(project: Project | undefined, versioned: boolean, right: NavbarI
       })),
     ],
   };
-}
-
-/**
- * The project's "News" link (to its blog tag page on the main site), placed after the version
- * dropdown, or null while the project's tag has no posts, as the tag page exists only then.
- * WORKSHOP_NEWS_TAGS (comma-separated tag keys) comes from scripts/build.mjs, which reads it from the
- * main build (shared/news.ts); a project built or previewed alone has none, so no News link.
- */
-function newsLink(projectId: string): NavbarItem | null {
-  const tags = (process.env.WORKSHOP_NEWS_TAGS ?? '').split(',');
-  return tags.includes(projectId) ? {label: 'News', ...crossInstanceLink(`/blog/tags/${projectId}`)} : null;
 }
 
 // Self-hosted fonts (no Google Fonts request): Inter for --font-body, JetBrains Mono for --font-mono

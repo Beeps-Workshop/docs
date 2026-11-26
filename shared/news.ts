@@ -1,9 +1,8 @@
-import fs from 'fs';
 import type {LoadContext, Plugin} from '@docusaurus/types';
 import type {BlogContent} from '@docusaurus/plugin-content-blog';
 
-// The main instance's blog, summarised for the pages that link to it: the homepage's news strip (the
-// latest posts) and every per-tag link (a project's navbar "News", the blog sidebar's "by project"),
+// The main instance's blog, summarised for the pages that link to it: the homepage's news boxes (the
+// latest posts) and every per-tag link (the blog sidebar's "by project"),
 // which may only point at a tag that has posts, since a tag page exists only then. Runs in Node.js.
 
 export const NEWS_PLUGIN = 'workshop-news';
@@ -21,8 +20,7 @@ const LATEST_COUNT = 3;
 
 /**
  * Reads the blog plugin's posts once all content is loaded and publishes them as global data (read
- * with useWorkshopNews). When WORKSHOP_NEWS_FILE is set (scripts/build.mjs), also writes the tag keys
- * there as JSON, so the project builds that follow know which projects have a News page.
+ * with useWorkshopNews).
  */
 export function newsPlugin(_context: LoadContext): Plugin {
   return {
@@ -48,8 +46,6 @@ export function newsPlugin(_context: LoadContext): Plugin {
           .map((tag) => tag.permalink.split('/').pop()!),
       };
       actions.setGlobalData(news);
-      const file = process.env.WORKSHOP_NEWS_FILE;
-      if (file) fs.writeFileSync(file, JSON.stringify(news.tags));
     },
   };
 }

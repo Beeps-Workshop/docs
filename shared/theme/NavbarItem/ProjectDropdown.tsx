@@ -10,7 +10,7 @@ type Props = Omit<DropdownProps, 'items' | 'label'> & {
   projectId: string;
 };
 
-// The project breadcrumb in a project instance's navbar (`Beep's Workshop / <project> ▾`): a dropdown
+// The project breadcrumb in a project instance's navbar (`Beeps' Workshop / <project> ▾`): a dropdown
 // of every project, each a cross-instance link. Those links are plain <a>s, so Docusaurus can't tell
 // which one is active; the current project's entry gets the active classes here.
 export default function ProjectDropdown({projectId, mobile, className, ...props}: Props): ReactNode {
