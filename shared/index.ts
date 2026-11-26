@@ -73,7 +73,7 @@ function navbar(project: Project | undefined, versioned: boolean, right: NavbarI
         // A plain link (crossInstanceLink), which the link checks skip, since the blog plugin creates
         // /blog only once a post exists.
         {label: 'news', ...crossInstanceLink('/blog')},
-        {label: 'github', href: 'https://github.com/Beeps-Workshop', className: 'pbtn px'},
+        {label: 'github', href: 'https://github.com/Beeps-Workshop', className: 'pbtn'},
       ];
   return {
     title: "Beep's Workshop",
@@ -84,7 +84,7 @@ function navbar(project: Project | undefined, versioned: boolean, right: NavbarI
       ...right.map((item) => ({
         ...item,
         position: 'right' as const,
-        className: ['pbtn px', item.className].filter(Boolean).join(' '),
+        className: ['pbtn', item.className].filter(Boolean).join(' '),
       })),
     ],
   };

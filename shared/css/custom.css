@@ -21,6 +21,14 @@
   --hover: #1B1B1F;
   --hover-ink: #F3F0E8;
   --accent-pop: #9DFF3C;
+  /* Secondary text on --inverse (the footer), which is dark in both modes. */
+  --on-inverse-muted: #B4B4BC;
+  --focus-ring: var(--ink);
+  /* Admonition accents (heading, icon, left bar); each reaches 4.5:1 on --surface. */
+  --admonition-tip: #2E7D32;
+  --admonition-info: #1F6FA8;
+  --admonition-warning: #7A600F;
+  --admonition-danger: #B3261E;
 
   /* The pixel font is named only here, so replacing it is this line plus the font package. */
   --font-display: 'Pixelify Sans', monospace;
@@ -40,6 +48,8 @@
   --ifm-background-surface-color: var(--surface);
   --ifm-font-color-base: var(--ink);
   --ifm-font-color-secondary: var(--text2);
+  --ifm-color-content: var(--ink);
+  --ifm-color-content-secondary: var(--text2);
   --ifm-heading-color: var(--ink);
   --ifm-link-color: var(--link);
   --ifm-link-hover-color: var(--link-hover);
@@ -52,12 +62,25 @@
   --ifm-heading-font-weight: 700;
   --ifm-font-family-monospace: var(--font-mono);
   --ifm-code-font-size: 95%;
+  --ifm-code-background: var(--surface2);
+
+  /* Square corners everywhere; only .pbtn has its pixel frame. */
+  --ifm-global-radius: 0;
+  --ifm-breadcrumb-border-radius: 0;
+
+  --ifm-table-border-width: 2px;
+  --ifm-table-border-color: var(--line);
+  --ifm-table-background: var(--surface);
+  --ifm-table-head-background: var(--surface2);
+  --ifm-table-stripe-background: color-mix(in srgb, var(--surface2) 40%, var(--surface));
+  --ifm-table-cell-padding: 10px 14px;
 
   --ifm-card-background-color: var(--surface);
   --ifm-navbar-background-color: var(--bg);
   --ifm-footer-background-color: var(--inverse);
   --ifm-footer-color: var(--on-inverse);
   --ifm-menu-color: var(--text2);
+  --ifm-menu-color-active: var(--ink);
   --ifm-menu-color-background-hover: var(--surface2);
   --ifm-menu-color-background-active: var(--surface);
   --ifm-dropdown-background-color: var(--surface);
@@ -84,6 +107,10 @@
   --hover: #2A2A31;
   --hover-ink: #ECE8DF;
   --accent-pop: #9DFF3C;
+  --admonition-tip: #8BE03A;
+  --admonition-info: #7CC4F0;
+  --admonition-warning: #D8BE5C;
+  --admonition-danger: #FF8A80;
 
   --ifm-color-primary: #8be03a;
   --ifm-color-primary-dark: #7ddb23;
@@ -104,54 +131,82 @@ html[data-theme='dark'] {
   --ifm-color-emphasis-300: var(--line);
   --ifm-toc-border-color: var(--line);
   --ifm-hover-overlay: var(--surface2);
+  --ifm-color-content: var(--ink);
+  --ifm-color-content-secondary: var(--text2);
+  --ifm-code-background: var(--surface2);
+  --ifm-table-stripe-background: color-mix(in srgb, var(--surface2) 40%, var(--surface));
 }
 
-/* Pixel primitives (from the design's artboards). */
+/* Primitives. Everything is square-cornered except the buttons, which recreate the workshop's
+   button images (static/img/buttons/*.png) at 2px per art pixel. */
 
-/* Stepped corners: 4px steps cut 8px into each corner. */
-.px {
-  clip-path: polygon(
-    0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
-    calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px,
-    100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px),
-    calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
-    8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
-  );
+/* Keyboard focus: a ring outside the element, in a colour that contrasts with what is around it
+   (--ink on the page; areas on --inverse set it to --on-inverse). */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
-/* Primary action button; dark in both modes. Pair with .px for the corners. */
+/* Primary action button, the same in both modes: a 7x7 art-pixel frame (black outline with notched
+   corners, #555 ring, #212121 fill) drawn as a 9-slice border-image, so the corners are transparent
+   and nothing clips the focus ring. Hover only lightens the fill. */
 .pbtn {
+  --pbtn-frame: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M2 0h3v7H2zM0 2h7v3H0zM1 1h5v5H1z'/%3E%3Cpath fill='%23555' d='M1 2h5v3H1zM2 1h3v5H2z'/%3E%3Cpath fill='%23212121' d='M2 3h3v1H2zM3 2h1v3H3z'/%3E%3C/svg%3E");
+  --pbtn-frame-hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M2 0h3v7H2zM0 2h7v3H0zM1 1h5v5H1z'/%3E%3Cpath fill='%23555' d='M1 2h5v3H1zM2 1h3v5H2z'/%3E%3Cpath fill='%232E2E2E' d='M2 3h3v1H2zM3 2h1v3H3z'/%3E%3C/svg%3E");
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 18px;
+  padding: 8px 14px;
   font-family: var(--font-display);
   font-size: 16px;
   font-weight: 500;
-  background: #26262B;
-  color: var(--on-inverse);
+  line-height: 1.2;
+  color: #FFFFFF;
   text-decoration: none;
-  box-shadow: inset 0 0 0 3px #111114, inset 0 0 0 5px #4A4A52;
+  background: none;
+  border: 6px solid transparent;
+  border-image: var(--pbtn-frame) 3 fill / 6px stretch;
 }
-.pbtn:hover,
-.pbtn:focus-visible {
-  background: #34343B;
-  color: var(--accent-pop);
+.pbtn:hover {
+  border-image-source: var(--pbtn-frame-hover);
+  color: #FFFFFF;
   text-decoration: none;
+}
+@media (forced-colors: active) {
+  .pbtn {
+    border: 2px solid ButtonText;
+    border-image: none;
+  }
 }
 
-/* Card that inverts on hover (homepage projects, blog posts). */
+/* Card (homepage projects, blog posts, docs pagination): lifts 2px on hover; light mode adds a soft
+   shadow (the card is already white), dark mode brightens the surface a little. */
 .pcard {
-  display: block;
   background: var(--surface);
   color: var(--ink);
   text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 .pcard:hover,
-.pcard:focus-visible {
-  background: var(--hover);
-  color: var(--hover-ink);
+a.pcard:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(27 27 31 / 12%);
+  color: var(--ink);
   text-decoration: none;
+}
+[data-theme='dark'] .pcard:hover,
+[data-theme='dark'] a.pcard:focus-visible {
+  background: color-mix(in srgb, var(--surface) 94%, #FFFFFF);
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pcard {
+    transition: none;
+  }
+  .pcard:hover,
+  a.pcard:focus-visible {
+    transform: none;
+  }
 }
 
 /* Tag chip. A project tag sets --tag-bg / --tag-fg inline from projectTagStyle (shared/projects.ts). */
@@ -246,13 +301,12 @@ a.ptag:focus-visible {
    navbar link's. The external-link arrow is hidden visually but keeps its "(opens in new tab)" label. */
 .navbar__items .navbar__link.pbtn {
   margin: 0 4px;
-  padding: 11px 18px;
+  padding: 8px 14px;
   font-size: 16px;
-  color: var(--on-inverse);
+  color: #FFFFFF;
 }
-.navbar__items .navbar__link.pbtn:hover,
-.navbar__items .navbar__link.pbtn:focus-visible {
-  color: var(--accent-pop);
+.navbar__items .navbar__link.pbtn:hover {
+  color: #FFFFFF;
 }
 .navbar__link.pbtn svg[class*='iconExternalLink'] {
   position: absolute;
@@ -260,6 +314,18 @@ a.ptag:focus-visible {
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+}
+/* Colour-mode toggle (theme/Navbar/ColorModeToggle, pixel icons in theme/Icon): a square 44px target. */
+div.workshop-color-toggle {
+  width: 44px;
+  height: 44px;
+}
+.workshop-color-toggle button {
+  border-radius: 0;
+  color: var(--ink);
+}
+.workshop-color-toggle button:hover {
+  background: var(--surface2);
 }
 /* In the mobile menu the same items are plain menu links. */
 .menu__link.pbtn {
@@ -269,8 +335,8 @@ a.ptag:focus-visible {
   font-weight: inherit;
   background: transparent;
   color: var(--ifm-menu-color);
-  box-shadow: none;
-  clip-path: none;
+  border: 0;
+  border-image: none;
 }
 .menu__link.pbtn:hover {
   background: var(--ifm-menu-color-background-hover);
@@ -332,6 +398,7 @@ a.ptag:focus-visible {
 
 /* News strip: dark in both modes. */
 .home-news {
+  --focus-ring: var(--on-inverse);
   flex: 1 1 480px;
   min-width: 0;
   display: flex;
@@ -433,7 +500,7 @@ a.ptag:focus-visible {
   gap: 20px;
 }
 
-/* Project card (.pcard inverts it on hover). The header art and the icon are backgrounds, so a
+/* Project card (.pcard lifts it on hover). The header art and the icon are backgrounds, so a
    missing image leaves the project-tinted strip or an empty square instead of a broken-image icon.
    (Icons have transparency, so the square gets no backdrop of its own.) */
 .home-card {
@@ -463,10 +530,6 @@ a.ptag:focus-visible {
   padding: 5px;
   background: var(--surface);
 }
-/* Only a mod's icon is framed; elsewhere the frame is plain (and unclipped). */
-.home-card:not(.home-card--header) .home-card__icon-frame {
-  clip-path: none;
-}
 .home-card__icon {
   display: block;
   width: 48px;
@@ -494,10 +557,6 @@ a.ptag:focus-visible {
   line-height: 1.5;
   color: var(--text2);
 }
-.home-card:hover .home-card__blurb,
-.home-card:focus-visible .home-card__blurb {
-  color: #C9C9D1;
-}
 
 @media (max-width: 600px) {
   .home {
@@ -510,4 +569,221 @@ a.ptag:focus-visible {
   .home-news {
     padding: 22px 20px 20px;
   }
+}
+
+/* Docs pages (Docs artboard): sidebar, breadcrumbs, version badge, admonitions, code, tables,
+   pagination and the table of contents. A project's accent is --project-accent (shared/index.ts);
+   the main site has none and falls back to --link. */
+
+/* Links in scrolling lists (sidebar, TOC) keep their focus ring inside, where overflow can't clip it. */
+.menu__link:focus-visible,
+.menu__caret:focus-visible,
+.table-of-contents__link:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Sidebar: a dashed rule, and the current page on --surface with an accent bar. */
+html .theme-doc-sidebar-container {
+  border-right: 3px dashed var(--line);
+}
+.theme-doc-sidebar-menu .menu__link {
+  padding: 9px 12px;
+  font-size: 15px;
+  line-height: 1.35;
+}
+.theme-doc-sidebar-menu .menu__link:hover {
+  color: var(--ink);
+}
+.theme-doc-sidebar-menu .menu__link--active:not(.menu__link--sublist) {
+  font-weight: 600;
+  box-shadow: inset 4px 0 0 var(--project-accent, var(--link));
+}
+
+/* Breadcrumbs: small and quiet; the current page is a chip in the project's tag colours. */
+.theme-doc-breadcrumbs {
+  --ifm-breadcrumb-size-multiplier: 1;
+  --ifm-breadcrumb-padding-vertical: 2px;
+  --ifm-breadcrumb-padding-horizontal: 4px;
+  --ifm-breadcrumb-item-background-active: var(--project-tag-bg, var(--surface2));
+  --ifm-breadcrumb-color-active: var(--project-tag-fg, var(--ink));
+  font-size: 14px;
+}
+.theme-doc-breadcrumbs .breadcrumbs__link {
+  color: var(--text3);
+}
+.theme-doc-breadcrumbs a.breadcrumbs__link:hover {
+  background: none;
+  color: var(--ink);
+  text-decoration: underline;
+}
+.theme-doc-breadcrumbs .breadcrumbs__item--active .breadcrumbs__link {
+  padding: 2px 8px;
+  font-family: var(--font-display);
+  color: var(--ifm-breadcrumb-color-active);
+}
+
+/* The version after a doc's title (theme/Heading). */
+.workshop-version-badge {
+  display: inline-block;
+  margin-left: 12px;
+  padding: 3px 8px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  vertical-align: middle;
+  background: var(--inverse);
+  color: var(--accent-pop);
+}
+
+/* The pixel font is wide: a one-word title such as "BetterKeepInventory" would break mid-word on a phone. */
+@media (max-width: 576px) {
+  .theme-doc-markdown h1 {
+    font-size: 26px;
+  }
+}
+
+/* Admonitions: a --surface panel with a coloured bar, heading and icon. Docusaurus maps note →
+   secondary, tip → success, info → info, warning and caution → warning, danger → danger. The
+   old-version / unreleased banner above a doc is an Infima warning alert and gets the same panel. */
+.theme-doc-version-banner.alert {
+  --ifm-alert-background-color: var(--surface);
+  --ifm-alert-foreground-color: var(--ink);
+  --ifm-alert-border-color: var(--admonition-warning);
+  --ifm-alert-border-left-width: 4px;
+  box-shadow: none;
+}
+.theme-doc-version-banner.alert a {
+  color: var(--link);
+}
+.theme-admonition.alert {
+  --admonition-accent: var(--text2);
+  --ifm-alert-background-color: var(--surface);
+  --ifm-alert-background-color-highlight: var(--surface2);
+  --ifm-alert-foreground-color: var(--ink);
+  --ifm-alert-border-color: var(--admonition-accent);
+  --ifm-alert-border-left-width: 4px;
+  --ifm-code-background: var(--surface2);
+  box-shadow: none;
+}
+.theme-admonition.alert--success {
+  --admonition-accent: var(--admonition-tip);
+}
+.theme-admonition.alert--info {
+  --admonition-accent: var(--admonition-info);
+}
+.theme-admonition.alert--warning {
+  --admonition-accent: var(--admonition-warning);
+}
+.theme-admonition.alert--danger {
+  --admonition-accent: var(--admonition-danger);
+}
+.theme-admonition [class*='admonitionHeading'] {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: none;
+  color: var(--admonition-accent);
+}
+.theme-admonition [class*='admonitionIcon'] svg {
+  fill: var(--admonition-accent);
+}
+.theme-admonition.alert a {
+  color: var(--link);
+}
+
+/* Code blocks: --surface with a rule, in --font-mono. Prism sets its theme's background inline on
+   the block, so the token wins only with !important. */
+.theme-code-block {
+  --prism-background-color: var(--surface) !important;
+  border: 2px solid var(--line);
+  box-shadow: none;
+  font-family: var(--font-mono);
+}
+.theme-code-block pre {
+  background-color: var(--surface) !important;
+}
+
+/* Tables (Infima's colours are set in :root): the header row in the display font. */
+.markdown table th {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* Previous / next: cards (.pcard's hover) with a small label and the title in the display font. */
+.pagination-nav__link {
+  padding: 14px 20px;
+  border: 0;
+  background: var(--surface);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.pagination-nav__link:hover,
+.pagination-nav__link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(27 27 31 / 12%);
+}
+[data-theme='dark'] .pagination-nav__link:hover,
+[data-theme='dark'] .pagination-nav__link:focus-visible {
+  background: color-mix(in srgb, var(--surface) 94%, #FFFFFF);
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pagination-nav__link {
+    transition: none;
+  }
+  .pagination-nav__link:hover,
+  .pagination-nav__link:focus-visible {
+    transform: none;
+  }
+}
+.pagination-nav__sublabel {
+  font-size: 13px;
+  color: var(--text3);
+}
+.pagination-nav__label {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Table of contents: "on this page", a 3px rule, the current heading marked in the accent. */
+.theme-doc-toc-desktop::before {
+  content: 'on this page';
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--text3);
+}
+.theme-doc-toc-desktop .table-of-contents {
+  padding: 0;
+  font-size: 14px;
+}
+.theme-doc-toc-desktop .table-of-contents__left-border {
+  border-left: 3px solid var(--line);
+}
+.theme-doc-toc-desktop .table-of-contents li {
+  margin: 0;
+}
+.theme-doc-toc-desktop .table-of-contents ul {
+  padding-left: 0;
+}
+.theme-doc-toc-desktop .table-of-contents__link {
+  display: block;
+  margin-left: -3px;
+  padding: 6px 12px;
+  border-left: 3px solid transparent;
+  color: var(--text2);
+}
+.theme-doc-toc-desktop .table-of-contents ul .table-of-contents__link {
+  padding-left: 24px;
+}
+.theme-doc-toc-desktop .table-of-contents__link:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+.theme-doc-toc-desktop .table-of-contents__link--active {
+  font-weight: 600;
+  color: var(--ink);
+  border-left-color: var(--project-accent, var(--link));
 }

@@ -15,7 +15,7 @@ export default function Tag({permalink, label, count, description}: Props): Reac
       rel="tag"
       href={permalink}
       title={description}
-      className="ptag px"
+      className="ptag"
       style={project && (projectTagStyle(project.id) as React.CSSProperties)}>
       {project && <img className={styles.icon} src={projectIcon(project.id)} alt="" width={16} height={16} />}
       {label}

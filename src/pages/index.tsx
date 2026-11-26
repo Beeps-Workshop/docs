@@ -42,7 +42,7 @@ function NewsStrip(): ReactNode {
   const {latest} = useWorkshopNews();
   if (latest.length === 0) return null;
   return (
-    <section id="news" className="home-news px" aria-labelledby="home-news-heading">
+    <section id="news" className="home-news" aria-labelledby="home-news-heading">
       <div className="home-news__head">
         <h2 id="home-news-heading" className="home-news__heading">
           news
@@ -66,12 +66,12 @@ function ProjectCard({project}: {project: Project}): ReactNode {
   const withHeader = project.kind === 'mod';
   const tagStyle = projectTagStyle(project.id) as CSSProperties;
   return (
-    <Link className={`home-card pcard px${withHeader ? ' home-card--header' : ''}`} {...crossInstanceLink(`/${project.id}/`)}>
+    <Link className={`home-card pcard${withHeader ? ' home-card--header' : ''}`} {...crossInstanceLink(`/${project.id}/`)}>
       {withHeader && (
         <span className="home-card__header" style={{...tagStyle, backgroundImage: header}} aria-hidden="true" />
       )}
       <span className="home-card__top">
-        <span className="home-card__icon-frame px">
+        <span className="home-card__icon-frame">
           <span className="home-card__icon" style={{backgroundImage: icon}} aria-hidden="true" />
         </span>
         <span className="home-card__kind ptag" style={tagStyle}>

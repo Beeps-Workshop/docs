@@ -46,7 +46,7 @@ export default function BlogSidebar({sidebar}: Props): ReactNode {
                 <li key={p.id}>
                   <Link
                     to={`/blog/tags/${p.id}`}
-                    className="ptag px"
+                    className="ptag"
                     style={projectTagStyle(p.id) as React.CSSProperties}>
                     <img className={styles.icon} src={projectIcon(p.id)} alt="" width={16} height={16} />
                     {p.short}
@@ -55,7 +55,7 @@ export default function BlogSidebar({sidebar}: Props): ReactNode {
               ))}
               {workshop && (
                 <li>
-                  <Link to="/blog/tags/workshop" className="ptag px">
+                  <Link to="/blog/tags/workshop" className="ptag">
                     Workshop
                   </Link>
                 </li>

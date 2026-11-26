@@ -1,4 +1,5 @@
 .footer {
+  --focus-ring: var(--on-inverse);
   background: var(--inverse);
   color: var(--on-inverse);
   padding: 28px 16px;
@@ -29,9 +30,12 @@
 .links a {
   color: var(--on-inverse);
 }
+.links a:hover {
+  color: var(--accent-pop);
+}
 
 .copyright {
-  color: #b4b4bc;
+  color: var(--on-inverse-muted);
 }
 
 .sponsors {
@@ -43,10 +47,14 @@
   justify-content: center;
 }
 
-/* The banner keeps its own colours in both modes; the frame is the pixel-cornered .px box. */
+/* The banner keeps its own colours in both modes, inside a light frame that stands out from the
+   dark footer (in dark mode the banner's navy would otherwise melt into it). */
 .sponsor {
   display: block;
   max-width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+  background: var(--surface2);
   line-height: 0;
 }
 

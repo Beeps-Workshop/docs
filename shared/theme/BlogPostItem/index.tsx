@@ -24,7 +24,7 @@ function BlogPostCard(): ReactNode {
   const image = assets.image ?? frontMatter.image;
   const imageUrl = useBaseUrl(image ?? '');
   return (
-    <article className={`${styles.card} px`}>
+    <article className={`${styles.card} pcard`}>
       {image && <div className={styles.image} style={{backgroundImage: `url(${JSON.stringify(imageUrl)})`}} />}
       <div className={styles.body}>
         <div className={styles.info}>
@@ -44,7 +44,7 @@ function BlogPostCard(): ReactNode {
               ))}
             </ul>
           )}
-          <Link to={permalink} className={`${styles.readMore} pbtn px`} aria-label={`Read more about ${title}`}>
+          <Link to={permalink} className={`${styles.readMore} pbtn`} aria-label={`Read more about ${title}`}>
             read more
           </Link>
         </div>

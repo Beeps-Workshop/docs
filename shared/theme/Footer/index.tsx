@@ -27,7 +27,7 @@ export default function Footer(): ReactNode {
               href={sponsor.href}
               target="_blank"
               rel="sponsored noopener"
-              className={`${styles.sponsor} px`}
+              className={styles.sponsor}
             >
               <img src={sponsor.image} alt={sponsor.alt} width={800} height={133} loading="lazy" />
             </a>

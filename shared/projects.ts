@@ -101,7 +101,7 @@ export const PROJECTS: Project[] = [
  * Colours for a `.ptag` chip naming the project (blog tags, homepage card labels), tinted from its
  * accent in the current colour mode. Returns CSS custom properties, not `background`/`color`, so the
  * chip's hover rule in custom.css still applies. Use as the chip's style:
- * `<Link className="ptag px" style={projectTagStyle(id) as React.CSSProperties}>`.
+ * `<Link className="ptag" style={projectTagStyle(id) as React.CSSProperties}>`.
  * The variables it points at are defined on every instance by the workshop plugin
  * (projectVarsCss in shared/index.ts).
  */
