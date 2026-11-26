@@ -28,7 +28,7 @@ export function withWorkshop(config: Config, opts: WorkshopOptions = {}): Config
     themeConfig: {
       ...config.themeConfig,
       colorMode: {respectPrefersColorScheme: true},
-      navbar: navbar(project),
+      navbar: navbar(project, isVersioned(config)),
       footer: {
         style: 'dark',
         links: [
@@ -51,6 +51,16 @@ export function withWorkshop(config: Config, opts: WorkshopOptions = {}): Config
   };
 }
 
+// A project instance is versioned when its classic preset's docs set a lastVersion (see the project's
+// docusaurus.config.ts); only then does the navbar get a version dropdown.
+function isVersioned(config: Config): boolean {
+  return (config.presets ?? []).some((preset) => {
+    if (!Array.isArray(preset) || (preset[0] !== 'classic' && preset[0] !== '@docusaurus/preset-classic')) return false;
+    const docs = (preset[1] as Preset.Options | undefined)?.docs;
+    return typeof docs === 'object' && docs.lastVersion !== undefined;
+  });
+}
+
 function findProject(projectId: string | undefined): Project | undefined {
   if (projectId === undefined) return undefined;
   const project = PROJECTS.find((p) => p.id === projectId);
@@ -60,7 +70,7 @@ function findProject(projectId: string | undefined): Project | undefined {
 
 // Project links cross instances (see shared/links.ts), so Docusaurus can't tell which one is active:
 // the current project's item and its dropdown get the active classes here.
-function navbar(active: Project | undefined): Preset.ThemeConfig['navbar'] {
+function navbar(active: Project | undefined, versioned: boolean): Preset.ThemeConfig['navbar'] {
   return {
     title: "Beep's Workshop",
     // TODO: add static/img/logo.png and uncomment:
@@ -81,6 +91,7 @@ function navbar(active: Project | undefined): Preset.ThemeConfig['navbar'] {
           })),
         };
       }),
+      ...(active && versioned ? [{type: 'docsVersionDropdown' as const, position: 'right' as const}] : []),
       {
         href: 'https://github.com/Beeps-Workshop',
         label: 'GitHub',
@@ -90,13 +101,25 @@ function navbar(active: Project | undefined): Preset.ThemeConfig['navbar'] {
   };
 }
 
-/** Provides the swizzled theme components, custom.css and the instance's accent colour. */
+/**
+ * Provides the swizzled theme components, custom.css and the instance's accent colour. Also points
+ * `@site/src/components/AdUnit` (imported by project docs) at shared/components/AdUnit.tsx, so ads
+ * are controlled from here; a project's own copy of that file is a no-ads stub for standalone preview.
+ */
 export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Plugin {
   const project = findProject(opts.projectId);
   return {
     name: 'workshop-theme',
     getThemePath: () => path.join(__dirname, 'theme'),
     getClientModules: () => [path.join(__dirname, 'css/custom.css')],
+    configureWebpack(config) {
+      // Put first, so it wins over Docusaurus' own `@site` alias.
+      config.resolve = {
+        ...config.resolve,
+        alias: {'@site/src/components/AdUnit$': path.join(__dirname, 'components/AdUnit.tsx'), ...config.resolve?.alias},
+      };
+      return {};
+    },
     // The main instance keeps custom.css's primary; a project instance overrides it with its accent.
     injectHtmlTags: () => (project ? {headTags: [{tagName: 'style', innerHTML: accentCss(project.accent)}]} : {}),
   };
