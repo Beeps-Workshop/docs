@@ -97,9 +97,6 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-export const MODS = PROJECTS.filter((p) => p.kind === 'mod');
-export const PLUGINS = PROJECTS.filter((p) => p.kind === 'plugin');
-
 /**
  * Colours for a `.ptag` chip naming the project (blog tags, homepage card labels), tinted from its
  * accent in the current colour mode. Returns CSS custom properties, not `background`/`color`, so the

@@ -68,9 +68,10 @@ function navbar(project: Project | undefined, versioned: boolean, right: NavbarI
         ...(news ? [news] : []),
       ]
     : [
-        // Plain links (crossInstanceLink), which the link checks skip: #projects until the new
-        // homepage has it; /blog for good, since the blog plugin creates it only once a post exists.
-        {label: 'projects', ...crossInstanceLink('/#projects')},
+        // A homepage section, not a page: never shown as the current one (no pathname is empty).
+        {label: 'projects', to: '/#projects', activeBaseRegex: '^$'},
+        // A plain link (crossInstanceLink), which the link checks skip, since the blog plugin creates
+        // /blog only once a post exists.
         {label: 'news', ...crossInstanceLink('/blog')},
         {label: 'github', href: 'https://github.com/Beeps-Workshop', className: 'pbtn px'},
       ];
