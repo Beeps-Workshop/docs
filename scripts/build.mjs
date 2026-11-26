@@ -11,7 +11,17 @@ const shared = path.join(root, 'shared');
 const docusaurus = path.join(root, 'node_modules/@docusaurus/core/bin/docusaurus.mjs');
 
 // shared/projects.ts is TypeScript; Node strips the types itself (22.6+ with a flag, 24+ by default).
-const {PROJECTS} = await import(pathToFileURL(path.join(shared, 'projects.ts')).href);
+let PROJECTS;
+try {
+  ({PROJECTS} = await import(pathToFileURL(path.join(shared, 'projects.ts')).href));
+} catch (error) {
+  fail(`cannot load shared/projects.ts on Node ${process.versions.node} (needs 22.18+, which strips TypeScript types by itself): ${error.message}`);
+}
+
+const SITE_URL = 'https://workshop.beepsterr.com';
+
+// The main build must not inherit these from the caller's shell: they would turn it into a project instance.
+const {DOCS_BASE_URL: _baseUrl, WORKSHOP_SHARED: _shared, ...cleanEnv} = process.env;
 
 // Check every project before building anything, so a missing source never half-builds.
 for (const {id} of PROJECTS) {
@@ -21,6 +31,7 @@ for (const {id} of PROJECTS) {
 }
 
 build(root, path.join(root, 'build'), {});
+writeRobots();
 for (const {id} of PROJECTS) {
   build(path.join(root, 'projects', id), path.join(root, 'build', id), {DOCS_BASE_URL: `/${id}/`, WORKSHOP_SHARED: shared});
   checkProjectBuild(id);
@@ -35,9 +46,18 @@ function build(siteDir, outDir, env) {
   const result = spawnSync(process.execPath, [docusaurus, 'build', siteDir, '--out-dir', outDir], {
     cwd: root,
     stdio: 'inherit',
-    env: {...process.env, DOCUSAURUS_NO_PERSISTENT_CACHE: '1', ...env},
+    env: {...cleanEnv, DOCUSAURUS_NO_PERSISTENT_CACHE: '1', ...env},
   });
   if (result.status !== 0) fail(`build of ${path.relative(root, siteDir) || 'main instance'} failed`);
+}
+
+// robots.txt is generated rather than kept in static/ so the per-project sitemaps (each instance
+// writes its own build/<id>/sitemap.xml) come from PROJECTS and cannot drift from it. Only the root
+// one is served: crawlers ignore robots.txt below the site root.
+function writeRobots() {
+  const sitemaps = ['/sitemap.xml', ...PROJECTS.map(({id}) => `/${id}/sitemap.xml`)];
+  const lines = ['User-agent: *', 'Allow: /', '', ...sitemaps.map((p) => `Sitemap: ${SITE_URL}${p}`)];
+  fs.writeFileSync(path.join(root, 'build', 'robots.txt'), lines.join('\n') + '\n');
 }
 
 // Guards against an instance rendering another's pages: a project's front page is a docs page (the

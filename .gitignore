@@ -4,6 +4,9 @@
 # Production
 /build
 
+# Project docs, filled by npm run fetch
+projects/
+
 # Generated files
 .docusaurus
 .cache-loader

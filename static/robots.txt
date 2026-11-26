@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://workshop.beepsterr.com/sitemap.xml
