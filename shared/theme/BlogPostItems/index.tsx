@@ -16,7 +16,7 @@ export default function BlogPostItemsWrapper(props: Props): ReactNode {
         <header className={styles.header}>
           <h1 className={styles.title}>news</h1>
           {/* Same text as the blog's blogDescription in docusaurus.config.ts (its meta description). */}
-          <p className={styles.description}>Updates, releases and the occasional ramble from the workshop.</p>
+          <p className={styles.description}>New releases, versions and general ramblings from a madgal</p>
         </header>
       )}
       <BlogPostItems {...props} />
