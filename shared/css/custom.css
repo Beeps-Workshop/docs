@@ -154,7 +154,7 @@ html[data-theme='dark'] {
   text-decoration: none;
 }
 
-/* Tag chip. Project tags take their tint inline from projectTagStyle (shared/projects.ts). */
+/* Tag chip. A project tag sets --tag-bg / --tag-fg inline from projectTagStyle (shared/projects.ts). */
 .ptag {
   display: inline-flex;
   gap: 6px;
@@ -162,15 +162,14 @@ html[data-theme='dark'] {
   padding: 4px 8px;
   font-family: var(--font-display);
   font-size: 14px;
-  background: var(--surface2);
-  color: var(--ink);
+  background: var(--tag-bg, var(--surface2));
+  color: var(--tag-fg, var(--ink));
   text-decoration: none;
 }
-/* !important: a project tag's tint is an inline style. */
 a.ptag:hover,
 a.ptag:focus-visible {
-  background: var(--hover) !important;
-  color: var(--accent-pop) !important;
+  background: var(--hover);
+  color: var(--accent-pop);
   text-decoration: none;
 }
 

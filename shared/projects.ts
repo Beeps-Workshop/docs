@@ -101,10 +101,13 @@ export const MODS = PROJECTS.filter((p) => p.kind === 'mod');
 export const PLUGINS = PROJECTS.filter((p) => p.kind === 'plugin');
 
 /**
- * Inline style for a chip naming the project (blog tags, homepage card labels), tinted from its
- * accent in the current colour mode. The variables are defined on every instance by the workshop
- * plugin (projectVarsCss in shared/index.ts).
+ * Colours for a `.ptag` chip naming the project (blog tags, homepage card labels), tinted from its
+ * accent in the current colour mode. Returns CSS custom properties, not `background`/`color`, so the
+ * chip's hover rule in custom.css still applies. Use as the chip's style:
+ * `<Link className="ptag px" style={projectTagStyle(id) as React.CSSProperties}>`.
+ * The variables it points at are defined on every instance by the workshop plugin
+ * (projectVarsCss in shared/index.ts).
  */
-export function projectTagStyle(id: string): {background: string; color: string} {
-  return {background: `var(--tag-${id}-bg)`, color: `var(--tag-${id}-fg)`};
+export function projectTagStyle(id: string): {'--tag-bg': string; '--tag-fg': string} {
+  return {'--tag-bg': `var(--tag-${id}-bg)`, '--tag-fg': `var(--tag-${id}-fg)`};
 }
