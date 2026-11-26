@@ -100,16 +100,16 @@ function newsLink(projectId: string): NavbarItem | null {
   return tags.includes(projectId) ? {label: 'News', ...crossInstanceLink(`/blog/tags/${projectId}`)} : null;
 }
 
-// Self-hosted fonts (no Google Fonts request): Pixelify Sans for --font-display, Inter for
-// --font-body, JetBrains Mono for --font-mono (see custom.css). Each file holds one weight.
+// Self-hosted fonts (no Google Fonts request): Inter for --font-body, JetBrains Mono for --font-mono
+// (see custom.css). Each file holds one weight. --font-display comes from the Adobe Fonts kit below.
 const FONTS = [
-  '@fontsource/pixelify-sans/500.css',
-  '@fontsource/pixelify-sans/700.css',
   '@fontsource/inter/400.css',
   '@fontsource/inter/500.css',
   '@fontsource/inter/600.css',
   '@fontsource/jetbrains-mono/500.css',
 ];
+
+const TYPEKIT_KIT = 'https://use.typekit.net/ngy6ari.css';
 
 /** Provides the swizzled theme components, fonts, custom.css and the colours that come from PROJECTS. */
 export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Plugin {
@@ -120,7 +120,14 @@ export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Pl
     getThemePath: () => path.join(__dirname, 'theme'),
     getClientModules: () => [...FONTS.map((font) => require.resolve(font)), path.join(__dirname, 'css/custom.css')],
     // The main instance keeps custom.css's primary and --link; a project instance overrides them with its accent.
-    injectHtmlTags: () => ({headTags: [{tagName: 'style', innerHTML: css}]}),
+    injectHtmlTags: () => ({
+      headTags: [
+        // --font-display: the Adobe Fonts kit, which Adobe's licence requires loading from their servers.
+        {tagName: 'link', attributes: {rel: 'preconnect', href: 'https://use.typekit.net', crossorigin: ''}},
+        {tagName: 'link', attributes: {rel: 'stylesheet', href: TYPEKIT_KIT}},
+        {tagName: 'style', innerHTML: css},
+      ],
+    }),
   };
 }
 
