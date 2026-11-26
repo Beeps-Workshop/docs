@@ -173,6 +173,110 @@ a.ptag:focus-visible {
   text-decoration: none;
 }
 
+/* Navbar (shared/theme/Navbar/Content, items from withWorkshop in shared/index.ts). */
+.navbar {
+  border-bottom: 3px solid var(--rule);
+  box-shadow: none;
+}
+/* The title (Docusaurus marks it text--truncate) may shrink on narrow screens rather than push the
+   right cluster out. */
+.navbar__brand {
+  min-width: 0;
+}
+.navbar__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.navbar__items .navbar__link {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.workshop-navbar__separator {
+  padding: 0 4px;
+  color: var(--text3);
+}
+@media (max-width: 996px) {
+  .workshop-navbar__separator {
+    display: none;
+  }
+}
+.workshop-navbar__project {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.navbar__items .workshop-navbar__project {
+  font-weight: 700;
+}
+.workshop-navbar__project-icon {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+.menu__link .workshop-navbar__project-icon {
+  width: 20px;
+  height: 20px;
+}
+.navbar__items .workshop-navbar__version {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 4px 10px;
+  font-size: 15px;
+  background: var(--surface2);
+}
+/* Pixel caret on navbar dropdowns (Infima draws a border triangle). */
+.navbar__items .dropdown > .navbar__link::after {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  margin-left: 6px;
+  top: 0;
+  transform: none;
+  vertical-align: middle;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4h8v2H8v2H4V6H2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4h8v2H8v2H4V6H2z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* Pixel buttons in the bar (the project's right items, the main site's github): .pbtn's look, not a
+   navbar link's. The external-link arrow is hidden visually but keeps its "(opens in new tab)" label. */
+.navbar__items .navbar__link.pbtn {
+  margin: 0 4px;
+  padding: 11px 18px;
+  font-size: 16px;
+  color: var(--on-inverse);
+}
+.navbar__items .navbar__link.pbtn:hover,
+.navbar__items .navbar__link.pbtn:focus-visible {
+  color: var(--accent-pop);
+}
+.navbar__link.pbtn svg[class*='iconExternalLink'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+/* In the mobile menu the same items are plain menu links. */
+.menu__link.pbtn {
+  padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  background: transparent;
+  color: var(--ifm-menu-color);
+  box-shadow: none;
+  clip-path: none;
+}
+.menu__link.pbtn:hover {
+  background: var(--ifm-menu-color-background-hover);
+  color: var(--ifm-menu-color);
+}
+
 /* Homepage project grid */
 .project-grid {
   display: grid;

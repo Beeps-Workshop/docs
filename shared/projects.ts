@@ -1,5 +1,5 @@
 // Single source of truth for the projects in the docs hub.
-// Imported by shared/index.ts (navbar, accent colour), the homepage and scripts/build.mjs.
+// Imported by shared/index.ts (accent colour), the navbar's project dropdown, the homepage and scripts/build.mjs.
 export type ProjectKind = 'mod' | 'plugin' | 'misc';
 
 export type Project = {
@@ -9,7 +9,7 @@ export type Project = {
   label: string;
   /** Short name for the menu bar. */
   short: string;
-  /** The project's kind: its homepage card label and its navbar dropdown (Mods / Plugins). */
+  /** The project's kind: its homepage card label. */
   kind: ProjectKind;
   /** One-line homepage description. */
   blurb: string;

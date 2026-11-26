@@ -1,0 +1,26 @@
+/* The left cluster may shrink (its title truncates) so the far-right cluster never leaves the bar. */
+.left {
+  min-width: 0;
+}
+
+/* Below Infima's breakpoint the toggle lives in the mobile sidebar's header instead. */
+@media (max-width: 996px) {
+  .colorModeToggle {
+    display: none;
+  }
+}
+
+/* Same size as the colour-mode toggle; stays in the bar on phones too. */
+.kofi {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+}
+.kofi:hover,
+.kofi:focus-visible {
+  color: var(--link);
+}

@@ -2,15 +2,20 @@ import path from 'path';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config, LoadContext, Plugin} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type {NavbarItem} from '@docusaurus/theme-common';
 import {PROJECTS, type Project} from './projects';
 import {crossInstanceLink} from './links';
 
 // The look every workshop instance shares (the main site and each project's docs): navbar, footer,
-// prism, colour mode, custom.css and the swizzled Logo. Runs in Node.js at config time.
+// prism, colour mode, custom.css and the swizzled theme components (theme/). Runs in Node.js at config time.
+
+export type {NavbarItem};
 
 export type WorkshopOptions = {
   /** The project this instance documents. Marks it active in the navbar and applies its accent. */
   projectId?: string;
+  /** The project's own navbar items, rendered on the right as pixel buttons in this order. */
+  right?: NavbarItem[];
 };
 
 /** Adds the shared look to an instance's config. */
@@ -24,7 +29,7 @@ export function withWorkshop(config: Config, opts: WorkshopOptions = {}): Config
     themeConfig: {
       ...config.themeConfig,
       colorMode: {respectPrefersColorScheme: true},
-      navbar: navbar(project, isVersioned(config)),
+      navbar: navbar(project, isVersioned(config), opts.right ?? []),
       footer: {
         style: 'dark',
         links: [
@@ -64,37 +69,45 @@ function findProject(projectId: string | undefined): Project | undefined {
   return project;
 }
 
-// Project links cross instances (see shared/links.ts), so Docusaurus can't tell which one is active:
-// the current project's item and its dropdown get the active classes here.
-function navbar(active: Project | undefined, versioned: boolean): Preset.ThemeConfig['navbar'] {
+// Left: the title (to / from every instance, see theme/Logo), then on a project instance
+// `/ <project ▾> <version ▾> News`, on the main site the workshop nav. Right: the project's own items
+// as pixel buttons; theme/Navbar/Content adds the colour toggle and the Ko-fi heart after them.
+function navbar(project: Project | undefined, versioned: boolean, right: NavbarItem[]): Preset.ThemeConfig['navbar'] {
+  const news = project && newsLink(project.id);
+  const left: NavbarItem[] = project
+    ? [
+        {type: 'custom-projectDropdown', projectId: project.id},
+        ...(versioned ? [{type: 'docsVersionDropdown', className: 'workshop-navbar__version'}] : []),
+        ...(news ? [news] : []),
+      ]
+    : [
+        // Plain links (crossInstanceLink) for now: the link checks would flag both until the new
+        // homepage (#projects) and the blog (/blog) exist.
+        {label: 'projects', ...crossInstanceLink('/#projects')},
+        {label: 'news', ...crossInstanceLink('/blog')},
+        {label: 'github', href: 'https://github.com/Beeps-Workshop', className: 'pbtn px'},
+      ];
   return {
     title: "Beep's Workshop",
     // TODO: add static/img/logo.png and uncomment:
     // logo: {alt: "Beep's Workshop", src: 'img/logo.png'},
     items: [
-      // Projects grouped into Mods / Plugins dropdowns (kind lives in shared/projects.ts).
-      ...(['mod', 'plugin'] as const).map((kind) => {
-        const projects = PROJECTS.filter((p) => p.kind === kind);
-        return {
-          type: 'dropdown' as const,
-          label: kind === 'mod' ? 'Mods' : 'Plugins',
-          position: 'left' as const,
-          ...(active?.kind === kind && {className: 'navbar__link--active'}),
-          items: projects.map((p) => ({
-            label: p.short,
-            ...crossInstanceLink(`/${p.id}/`),
-            ...(p === active && {className: 'dropdown__link--active menu__link--active'}),
-          })),
-        };
-      }),
-      ...(active && versioned ? [{type: 'docsVersionDropdown' as const, position: 'right' as const}] : []),
-      {
-        href: 'https://github.com/Beeps-Workshop',
-        label: 'GitHub',
+      ...left.map((item) => ({...item, position: 'left' as const})),
+      ...right.map((item) => ({
+        ...item,
         position: 'right' as const,
-      },
+        className: ['pbtn px', item.className].filter(Boolean).join(' '),
+      })),
     ],
   };
+}
+
+/**
+ * The project's "News" link (to its blog tag page), placed after the version dropdown, or null while
+ * the project has no posts. Hook for the blog task; until then no project gets one.
+ */
+function newsLink(_projectId: string): NavbarItem | null {
+  return null;
 }
 
 // Self-hosted fonts (no Google Fonts request): Pixelify Sans for --font-display, Inter for
