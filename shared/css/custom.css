@@ -1,30 +1,177 @@
 /**
- * Global styles for every instance, loaded by the workshop plugin (shared/index.ts).
- * The classic template bundles Infima. Override its variables here.
- * Palette is the Docusaurus default for now — retheme to taste. A project instance
- * overrides the primary shades below with its own accent (see accentCss in shared/index.ts).
+ * Global styles for every instance, loaded by the workshop plugin (shared/index.ts) after the fonts.
+ * The design tokens (spec: workshop restyle, Tokens) are set here and mapped onto Infima's variables
+ * so stock Docusaurus parts match. A project instance overrides the primary shades and --link with
+ * its accent, and every instance gets each project's tag colours (see shared/index.ts).
  */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --bg: #F3F0E8;
+  --ink: #1B1B1F;
+  --surface: #FFFFFF;
+  --surface2: #E7E2D6;
+  --text1: #2E2E34;
+  --text2: #46464E;
+  --text3: #6B6559;
+  --line: #D3CDBF;
+  --rule: #1B1B1F;
+  --link: #2E7D32;
+  --link-hover: #1B5E20;
+  --inverse: #1B1B1F;
+  --on-inverse: #F3F0E8;
+  --hover: #1B1B1F;
+  --hover-ink: #F3F0E8;
+  --accent-pop: #9DFF3C;
+
+  /* The pixel font is named only here, so replacing it is this line plus the font package. */
+  --font-display: 'Pixelify Sans', monospace;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Infima: the main instance's primary is --link's green, with Docusaurus' shade steps. */
+  --ifm-color-primary: #2e7d32;
+  --ifm-color-primary-dark: #29712d;
+  --ifm-color-primary-darker: #276a2a;
+  --ifm-color-primary-darkest: #205823;
+  --ifm-color-primary-light: #338a37;
+  --ifm-color-primary-lighter: #359039;
+  --ifm-color-primary-lightest: #3ca341;
+
+  --ifm-background-color: var(--bg);
+  --ifm-background-surface-color: var(--surface);
+  --ifm-font-color-base: var(--ink);
+  --ifm-font-color-secondary: var(--text2);
+  --ifm-heading-color: var(--ink);
+  --ifm-link-color: var(--link);
+  --ifm-link-hover-color: var(--link-hover);
+  --ifm-color-emphasis-300: var(--line);
+  --ifm-toc-border-color: var(--line);
+  --ifm-hr-background-color: var(--line);
+
+  --ifm-font-family-base: var(--font-body);
+  --ifm-heading-font-family: var(--font-display);
+  --ifm-heading-font-weight: 700;
+  --ifm-font-family-monospace: var(--font-mono);
   --ifm-code-font-size: 95%;
+
+  --ifm-card-background-color: var(--surface);
+  --ifm-navbar-background-color: var(--bg);
+  --ifm-footer-background-color: var(--inverse);
+  --ifm-footer-color: var(--on-inverse);
+  --ifm-menu-color: var(--text2);
+  --ifm-menu-color-background-hover: var(--surface2);
+  --ifm-menu-color-background-active: var(--surface);
+  --ifm-dropdown-background-color: var(--surface);
+  --ifm-hover-overlay: var(--surface2);
+
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
+/* Plain [data-theme] (not html[...]) so the plugin's head styles, which are more specific, win. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --bg: #141417;
+  --ink: #ECE8DF;
+  --surface: #1F1F24;
+  --surface2: #2A2A31;
+  --text1: #DAD6CD;
+  --text2: #B4B0A8;
+  --text3: #8F8A80;
+  --line: #34343C;
+  --rule: #34343C;
+  --link: #8BE03A;
+  --link-hover: #B6F37A;
+  --inverse: #0B0B0D;
+  --on-inverse: #ECE8DF;
+  --hover: #2A2A31;
+  --hover-ink: #ECE8DF;
+  --accent-pop: #9DFF3C;
+
+  --ifm-color-primary: #8be03a;
+  --ifm-color-primary-dark: #7ddb23;
+  --ifm-color-primary-darker: #76cf21;
+  --ifm-color-primary-darkest: #61ab1b;
+  --ifm-color-primary-light: #99e452;
+  --ifm-color-primary-lighter: #a1e65f;
+  --ifm-color-primary-lightest: #b6ec83;
+
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Infima redefines these under html[data-theme='dark'], which outranks :root, so the mapping is
+   repeated at the same specificity (later wins). */
+html[data-theme='dark'] {
+  --ifm-background-color: var(--bg);
+  --ifm-background-surface-color: var(--surface);
+  --ifm-color-emphasis-300: var(--line);
+  --ifm-toc-border-color: var(--line);
+  --ifm-hover-overlay: var(--surface2);
+}
+
+/* Pixel primitives (from the design's artboards). */
+
+/* Stepped corners: 4px steps cut 8px into each corner. */
+.px {
+  clip-path: polygon(
+    0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
+    calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px),
+    calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
+    8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
+  );
+}
+
+/* Primary action button; dark in both modes. Pair with .px for the corners. */
+.pbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  background: #26262B;
+  color: var(--on-inverse);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 3px #111114, inset 0 0 0 5px #4A4A52;
+}
+.pbtn:hover,
+.pbtn:focus-visible {
+  background: #34343B;
+  color: var(--accent-pop);
+  text-decoration: none;
+}
+
+/* Card that inverts on hover (homepage projects, blog posts). */
+.pcard {
+  display: block;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+.pcard:hover,
+.pcard:focus-visible {
+  background: var(--hover);
+  color: var(--hover-ink);
+  text-decoration: none;
+}
+
+/* Tag chip. Project tags take their tint inline from projectTagStyle (shared/projects.ts). */
+.ptag {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 8px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  background: var(--surface2);
+  color: var(--ink);
+  text-decoration: none;
+}
+/* !important: a project tag's tint is an inline style. */
+a.ptag:hover,
+a.ptag:focus-visible {
+  background: var(--hover) !important;
+  color: var(--accent-pop) !important;
+  text-decoration: none;
 }
 
 /* Homepage project grid */
@@ -75,17 +222,3 @@
   object-fit: cover;
 }
 
-/* Footer: docs button on top, store links in a row below. */
-.project-card__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.project-card__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.project-card__links .button {
-  flex: 1 1 auto;
-}

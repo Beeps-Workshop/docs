@@ -97,25 +97,63 @@ function navbar(active: Project | undefined, versioned: boolean): Preset.ThemeCo
   };
 }
 
-/** Provides the swizzled theme components, custom.css and the instance's accent colour. */
+// Self-hosted fonts (no Google Fonts request): Pixelify Sans for --font-display, Inter for
+// --font-body, JetBrains Mono for --font-mono (see custom.css). Each file holds one weight.
+const FONTS = [
+  '@fontsource/pixelify-sans/500.css',
+  '@fontsource/pixelify-sans/700.css',
+  '@fontsource/inter/400.css',
+  '@fontsource/inter/500.css',
+  '@fontsource/inter/600.css',
+  '@fontsource/jetbrains-mono/500.css',
+];
+
+/** Provides the swizzled theme components, fonts, custom.css and the colours that come from PROJECTS. */
 export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Plugin {
   const project = findProject(opts.projectId);
+  const css = projectVarsCss(PROJECTS) + (project ? ' ' + accentCss(project.accent) : '');
   return {
     name: 'workshop-theme',
     getThemePath: () => path.join(__dirname, 'theme'),
-    getClientModules: () => [path.join(__dirname, 'css/custom.css')],
-    // The main instance keeps custom.css's primary; a project instance overrides it with its accent.
-    injectHtmlTags: () => (project ? {headTags: [{tagName: 'style', innerHTML: accentCss(project.accent)}]} : {}),
+    getClientModules: () => [...FONTS.map((font) => require.resolve(font)), path.join(__dirname, 'css/custom.css')],
+    // The main instance keeps custom.css's primary and --link; a project instance overrides them with its accent.
+    injectHtmlTags: () => ({headTags: [{tagName: 'style', innerHTML: css}]}),
   };
 }
 
+// Tag tints: the accent mixed into --surface, with the accent as text. The shares keep every accent
+// at 4.5:1 or better against its tint (the tightest is fnf in light mode, about 4.5 at 10%).
+const TAG_TINT = {light: '10%', dark: '18%'};
+
+function tagVars(prefix: string, accent: string, mode: keyof typeof TAG_TINT): string {
+  return `${prefix}-bg: color-mix(in srgb, ${accent} ${TAG_TINT[mode]}, var(--surface)); ${prefix}-fg: ${accent};`;
+}
+
 /**
- * Infima's primary colour and its six shades for light and dark mode. The shades follow Docusaurus'
- * own colour generator (HSL lightness scaled by 10/15/30%). The selectors are more specific than
+ * `--accent-<id>` and the tag tints `--tag-<id>-bg` / `--tag-<id>-fg` for every project, in light and
+ * dark mode, on every instance, so any page can name any project in its colours (projectTagStyle).
+ */
+export function projectVarsCss(projects: Project[]): string {
+  const vars = (mode: keyof typeof TAG_TINT) =>
+    projects.map((p) => `--accent-${p.id}: ${p.accent[mode]}; ${tagVars(`--tag-${p.id}`, p.accent[mode], mode)}`).join(' ');
+  return `html:root { ${vars('light')} } html[data-theme='dark'] { ${vars('dark')} }`;
+}
+
+/**
+ * A project instance's accent for light and dark mode: Infima's primary and its six shades, links,
+ * and `--project-accent` / `--project-tag-bg` / `--project-tag-fg`. The shades follow Docusaurus' own
+ * colour generator (HSL lightness scaled by 10/15/30%). The selectors are more specific than
  * custom.css's `:root` / `[data-theme='dark']`, since stylesheets load after these head tags.
  */
 export function accentCss(accent: Project['accent']): string {
-  return `html:root { ${primaryVars(accent.light)} } html[data-theme='dark'] { ${primaryVars(accent.dark)} }`;
+  return (
+    `html:root { ${accentVars(accent.light, 'light')} --link-hover: ${shade(accent.light, -0.15)}; } ` +
+    `html[data-theme='dark'] { ${accentVars(accent.dark, 'dark')} --link-hover: ${shade(accent.dark, 0.15)}; }`
+  );
+}
+
+function accentVars(hex: string, mode: keyof typeof TAG_TINT): string {
+  return `${primaryVars(hex)} --link: ${hex}; --project-accent: ${hex}; ${tagVars('--project-tag', hex, mode)}`;
 }
 
 function primaryVars(hex: string): string {

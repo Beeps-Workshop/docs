@@ -40,22 +40,10 @@ function ProjectCard({project, header = true}: {project: Project; header?: boole
       <div className="card__body">
         <p>{project.blurb}</p>
       </div>
-      <div className="card__footer project-card__actions">
+      <div className="card__footer">
         <Link className="button button--primary button--block" {...crossInstanceLink(`/${project.id}/`)}>
           Read the docs
         </Link>
-        <div className="project-card__links">
-          {project.modrinth && (
-            <Link className="button button--secondary button--sm" href={project.modrinth}>
-              Modrinth
-            </Link>
-          )}
-          {project.curseforge && (
-            <Link className="button button--secondary button--sm" href={project.curseforge}>
-              CurseForge
-            </Link>
-          )}
-        </div>
       </div>
     </div>
   );

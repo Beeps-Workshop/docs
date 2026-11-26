@@ -18,6 +18,9 @@
   "dependencies": {
     "@docusaurus/core": "3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/pixelify-sans": "^5.3.0",
     "@lunega/analytics": "^0.0.1",
     "@lunega/app": "^0.0.3",
     "@mdx-js/react": "^3.0.0",
