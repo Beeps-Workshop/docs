@@ -6,16 +6,12 @@ import {PROJECTS, type Project} from './projects';
 import {crossInstanceLink} from './links';
 
 // The look every workshop instance shares (the main site and each project's docs): navbar, footer,
-// prism, colour mode, custom.css and the swizzled Footer. Runs in Node.js at config time.
+// prism, colour mode, custom.css and the swizzled Logo. Runs in Node.js at config time.
 
 export type WorkshopOptions = {
   /** The project this instance documents. Marks it active in the navbar and applies its accent. */
   projectId?: string;
 };
-
-// Ads are off (see ADS_ENABLED in shared/components/AdUnit.tsx). To turn them back on, flip that
-// and add the AdSense loader to the config withWorkshop returns:
-//   scripts: [{src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6217402110753644', async: true, crossorigin: 'anonymous'}],
 
 /** Adds the shared look to an instance's config. */
 export function withWorkshop(config: Config, opts: WorkshopOptions = {}): Config {
@@ -101,25 +97,13 @@ function navbar(active: Project | undefined, versioned: boolean): Preset.ThemeCo
   };
 }
 
-/**
- * Provides the swizzled theme components, custom.css and the instance's accent colour. Also points
- * `@site/src/components/AdUnit` (imported by project docs) at shared/components/AdUnit.tsx, so ads
- * are controlled from here; a project's own copy of that file is a no-ads stub for standalone preview.
- */
+/** Provides the swizzled theme components, custom.css and the instance's accent colour. */
 export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Plugin {
   const project = findProject(opts.projectId);
   return {
     name: 'workshop-theme',
     getThemePath: () => path.join(__dirname, 'theme'),
     getClientModules: () => [path.join(__dirname, 'css/custom.css')],
-    configureWebpack(config) {
-      // Put first, so it wins over Docusaurus' own `@site` alias.
-      config.resolve = {
-        ...config.resolve,
-        alias: {'@site/src/components/AdUnit$': path.join(__dirname, 'components/AdUnit.tsx'), ...config.resolve?.alias},
-      };
-      return {};
-    },
     // The main instance keeps custom.css's primary; a project instance overrides it with its accent.
     injectHtmlTags: () => (project ? {headTags: [{tagName: 'style', innerHTML: accentCss(project.accent)}]} : {}),
   };
