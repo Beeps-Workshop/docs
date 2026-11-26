@@ -1,5 +1,6 @@
 // Imports one blog post per minor release series from each project's Modrinth page into
-// blog/releases/<id>-<major>-<minor>.md. Patch releases are left out. It only adds posts that are
+// blog/releases/<id>-<major>-<minor>.md. Patch releases are left out, and so are alpha and beta
+// versions (on purpose: snapshots and betas are not releases). It only adds posts that are
 // missing: an existing file is never changed or deleted, so a post can be edited after import.
 //
 //   npm run import-releases                 write every missing post
@@ -21,10 +22,19 @@ function parseVersion(versionNumber) {
   return {major: Number(match[1]), minor: Number(match[2]), patch};
 }
 
+const byDate = (a, b) => Date.parse(a.date_published) - Date.parse(b.date_published) || a.version_number.localeCompare(b.version_number);
+
+/** Numeric-aware order, so 1.21.2 comes before 1.21.10. */
+const compareGameVersions = (a, b) => a.localeCompare(b, 'en', {numeric: true});
+
+const union = (lists) => [...new Set(lists.flat())];
+
 /**
  * One release per `major.minor`: its `x.y.0` version (a bare `x.y` counts as `x.y.0`), else the
- * earliest of that minor by `date_published`. Alpha/beta versions and unparseable ones are ignored.
- * Each result is the Modrinth version plus `major` and `minor`.
+ * earliest of that minor by `date_published`. Builds of the same base version (`1.0.0+fabric`,
+ * `1.0.0+neoforge`) merge into one release: the union of loaders and game versions, a build per link
+ * in `builds`, and the first non-empty changelog. Alpha/beta versions and unparseable ones are skipped
+ * on purpose. Each result is the first build plus `major`, `minor`, `loaders`, `game_versions`, `builds`.
  */
 export function pickMinorReleases(versions) {
   const series = new Map();
@@ -32,19 +42,36 @@ export function pickMinorReleases(versions) {
     if (version.version_type && version.version_type !== 'release') continue;
     const parsed = parseVersion(version.version_number);
     if (!parsed) continue;
-    const key = `${parsed.major}.${parsed.minor}`;
-    if (!series.has(key)) series.set(key, []);
-    series.get(key).push({...version, major: parsed.major, minor: parsed.minor, patch: parsed.patch});
+    const base = version.version_number.replace(/\+.*$/, '');
+    const minorKey = `${parsed.major}.${parsed.minor}`;
+    if (!series.has(minorKey)) series.set(minorKey, new Map());
+    const bases = series.get(minorKey);
+    if (!bases.has(base)) bases.set(base, {patch: parsed.patch, builds: []});
+    bases.get(base).builds.push(version);
   }
-  const byDate = (a, b) => Date.parse(a.date_published) - Date.parse(b.date_published) || a.version_number.localeCompare(b.version_number);
-  return [...series.values()].map((candidates) => {
-    const zero = candidates.filter((c) => c.patch === 0).sort(byDate);
-    const {patch: _patch, ...release} = (zero.length ? zero : candidates.sort(byDate))[0];
-    return release;
+  return [...series.entries()].map(([minorKey, bases]) => {
+    const groups = [...bases.values()].map((g) => ({...g, builds: g.builds.sort(byDate)}));
+    const groupDate = (g) => g.builds[0];
+    const zero = groups.filter((g) => g.patch === 0).sort((x, y) => byDate(groupDate(x), groupDate(y)));
+    const {builds} = (zero.length ? zero : groups.sort((x, y) => byDate(groupDate(x), groupDate(y))))[0];
+    const [major, minor] = minorKey.split('.').map(Number);
+    return {
+      ...builds[0],
+      major,
+      minor,
+      changelog: builds.map((b) => b.changelog).find((c) => c && c.trim()) ?? '',
+      loaders: union(builds.map((b) => b.loaders)).sort(),
+      game_versions: union(builds.map((b) => b.game_versions)).sort(compareGameVersions),
+      builds: builds.map((b) => ({id: b.id, loaders: [...b.loaders].sort()})),
+    };
   });
 }
 
-/** Escapes what would break MDX (`<`, `{`, `}`) outside code, leaving fenced blocks and inline code as written. */
+/**
+ * Prepares a changelog for the post body, outside code: demotes headings one level (the post's title
+ * is its only H1) and escapes what would break MDX (`<`, `{`, `}`). Fenced blocks and inline code
+ * are left as written.
+ */
 function neutraliseMdx(markdown) {
   let fence = null;
   return markdown
@@ -59,7 +86,7 @@ function neutraliseMdx(markdown) {
         fence = marker[1];
         return line;
       }
-      return line
+      return demoteHeading(line)
         .split(/(``[^\n]*?``|`[^`\n]*`)/)
         .map((part, i) => (i % 2 ? part : part.replace(/[<{}]/g, '\\$&')))
         .join('');
@@ -67,16 +94,23 @@ function neutraliseMdx(markdown) {
     .join('\n');
 }
 
+const demoteHeading = (line) => line.replace(/^( {0,3})(#{1,5})(?=\s)/, '$1$2#');
+
 const postPath = (project, release) => `${RELEASES_DIR}/${project.id}-${release.major}-${release.minor}.md`;
 
 /** The post for one release: {path (relative to the repo root), contents}. */
 export function postFile(project, release) {
   const changelog = neutraliseMdx((release.changelog ?? '').replace(/\r\n?/g, '\n').trim());
-  const url = `https://modrinth.com/project/${project.modrinthSlug}/version/${release.id}`;
+  const link = (id) => `https://modrinth.com/project/${project.modrinthSlug}/version/${id}`;
+  const builds = release.builds ?? [{id: release.id, loaders: release.loaders}];
+  const modrinth =
+    builds.length === 1
+      ? `[View this release on Modrinth](${link(builds[0].id)})`
+      : `Modrinth: ${builds.map((b) => `[${b.loaders.join('/')}](${link(b.id)})`).join(' · ')}`;
   const body = [
     ...(changelog ? [changelog] : []),
     `Minecraft ${release.game_versions.join(', ')} · ${release.loaders.join(', ')}`,
-    `[View this release on Modrinth](${url})`,
+    modrinth,
   ].join('\n\n');
   const frontMatter = [
     `title: ${JSON.stringify(`${project.label} ${release.major}.${release.minor}`)}`,
@@ -107,7 +141,9 @@ async function loadProjects() {
 
 export async function main(argv, {fetch: fetchFn = fetch, root: repoRoot = root, projects, log = console.log} = {}) {
   const dryRun = argv.includes('--dry-run');
-  const only = argv.includes('--project') ? argv[argv.indexOf('--project') + 1] : null;
+  const at = argv.indexOf('--project');
+  const only = at === -1 ? null : argv[at + 1];
+  if (at !== -1 && (!only || only.startsWith('--'))) throw new Error('--project needs a project id (usage: import-releases [--dry-run] [--project <id>])');
   const all = projects ?? (await loadProjects());
   if (only && !all.some((p) => p.id === only)) throw new Error(`unknown project '${only}'`);
 

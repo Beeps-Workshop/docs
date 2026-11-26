@@ -134,6 +134,51 @@ test('every real bki changelog compiles as MDX', async () => {
   for (const release of pickMinorReleases(bki)) await compile(postFile(project, release).contents);
 });
 
+test('builds of one base version merge into one release with every loader, version and link', () => {
+  const picked = pickMinorReleases([
+    v('1.0.0+neoforge', '2026-07-28T10:00:00Z', {loaders: ['neoforge'], game_versions: ['1.21.10', '1.21.2'], changelog: ''}),
+    v('1.0.0+fabric', '2026-07-28T10:00:00Z', {loaders: ['fabric'], game_versions: ['1.21.2', '1.21.1'], changelog: 'first words'}),
+    v('1.0.1+fabric', '2026-08-01T10:00:00Z'),
+  ]);
+  assert.equal(picked.length, 1);
+  assert.deepEqual(picked[0].loaders, ['fabric', 'neoforge']);
+  assert.deepEqual(picked[0].game_versions, ['1.21.1', '1.21.2', '1.21.10']);
+  assert.equal(picked[0].changelog, 'first words');
+  const {contents} = postFile(project, picked[0]);
+  assert.ok(contents.includes('Minecraft 1.21.1, 1.21.2, 1.21.10 · fabric, neoforge'));
+  assert.ok(
+    contents.includes(
+      'Modrinth: [fabric](https://modrinth.com/project/betterkeepinventory/version/id-1.0.0+fabric) · ' +
+        '[neoforge](https://modrinth.com/project/betterkeepinventory/version/id-1.0.0+neoforge)',
+    ),
+  );
+});
+
+test('different patch releases are not merged', () => {
+  const picked = pickMinorReleases([v('1.2.1+a', '2026-02-01T00:00:00Z'), v('1.2.2+a', '2026-03-01T00:00:00Z')]);
+  assert.deepEqual(picked.map((r) => r.version_number), ['1.2.1+a']);
+  assert.equal(picked[0].loaders.length, 1);
+});
+
+test('game versions sort numerically', () => {
+  const release = pickMinorReleases([v('1.0.0', '2026-01-01T00:00:00Z', {game_versions: ['1.21.10', '1.21.2', '1.9', '26.1']})])[0];
+  assert.deepEqual(release.game_versions, ['1.9', '1.21.2', '1.21.10', '26.1']);
+});
+
+test('headings in the changelog drop one level, except inside code', () => {
+  const changelog = '# v1.3.0\n## What\'s Changed\n###### six\n#nospace\n```\n# comment\n```';
+  const release = pickMinorReleases([v('1.3.0', '2026-01-01T00:00:00Z', {changelog})])[0];
+  const body = postFile(project, release).contents;
+  assert.ok(body.includes("\n## v1.3.0\n### What's Changed\n###### six\n#nospace\n```\n# comment\n```"));
+  assert.ok(!/^# /m.test(body.replace(/^---\n[\s\S]*?\n---\n/, '').replace(/```[\s\S]*?```/g, '')));
+});
+
+test('main rejects --project without a value', async () => {
+  const opts = {fetch: async () => ({ok: true, json: async () => []}), root: os.tmpdir(), projects: [project], log() {}};
+  await assert.rejects(main(['--project'], opts), /usage/);
+  await assert.rejects(main(['--project', '--dry-run'], opts), /usage/);
+});
+
 test('missingPosts skips a minor whose file exists, even if its content was edited', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'import-releases-'));
   fs.writeFileSync(path.join(dir, 'bki-2-3.md'), 'my own words\n');
