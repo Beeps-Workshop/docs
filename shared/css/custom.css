@@ -284,18 +284,18 @@ a.ptag:focus-visible {
   font-size: 15px;
   background: var(--surface2);
 }
-/* Pixel caret on navbar dropdowns (Infima draws a border triangle). */
+/* Material Design caret (mdiMenuDown) on navbar dropdowns (Infima draws a border triangle). */
 .navbar__items .dropdown > .navbar__link::after {
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   border: 0;
   margin-left: 6px;
   top: 0;
   transform: none;
   vertical-align: middle;
   background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4h8v2H8v2H4V6H2z'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4h8v2H8v2H4V6H2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 /* Pixel buttons in the bar (the project's right items, the main site's github): .pbtn's look, not a
    navbar link's. The external-link arrow is hidden visually but keeps its "(opens in new tab)" label. */
@@ -315,7 +315,7 @@ a.ptag:focus-visible {
   overflow: hidden;
   clip-path: inset(50%);
 }
-/* Colour-mode toggle (theme/Navbar/ColorModeToggle, pixel icons in theme/Icon): a square 44px target. */
+/* Colour-mode toggle (theme/Navbar/ColorModeToggle, Material Design icons in theme/Icon): a square 44px target. */
 div.workshop-color-toggle {
   width: 44px;
   height: 44px;
@@ -423,6 +423,8 @@ div.workshop-color-toggle {
   color: var(--on-inverse);
 }
 .home-news__all {
+  display: inline-flex;
+  align-items: center;
   padding: 8px 0;
   font-family: var(--font-display);
   font-size: 16px;

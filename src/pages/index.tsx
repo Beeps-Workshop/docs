@@ -1,4 +1,5 @@
 import type {CSSProperties, ReactNode} from 'react';
+import {mdiChevronRight} from '@mdi/js';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useBrokenLinks from '@docusaurus/useBrokenLinks';
@@ -48,7 +49,10 @@ function NewsStrip(): ReactNode {
           news
         </h2>
         <Link to="/blog" className="home-news__all">
-          all posts &gt;
+          all posts
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d={mdiChevronRight} fill="currentColor" />
+          </svg>
         </Link>
       </div>
       {latest.map((post) => (
