@@ -1,6 +1,7 @@
 import {useState, type ReactNode} from 'react';
 import {mdiHeart, mdiHeartOutline} from '@mdi/js';
 import clsx from 'clsx';
+import {siCurseforge, siModrinth} from 'simple-icons';
 import {useThemeConfig, ErrorCauseBoundary, ThemeClassNames} from '@docusaurus/theme-common';
 import {splitNavbarItems, useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';
 import NavbarItem, {type Props as NavbarItemConfig} from '@theme/NavbarItem';
@@ -16,6 +17,28 @@ import styles from './styles.module.css';
 // right items, then the colour-mode toggle and the Ko-fi heart, which every instance shows last. The
 // left/right item lists themselves come from withWorkshop (shared/index.ts).
 
+// A project's right-hand "Modrinth" / "CurseForge" link (label and host both match) is shown as that
+// brand's icon in the same thin button; anything else, such as "download", stays a text button.
+const STORE_ICONS = [
+  {host: 'modrinth.com', label: 'modrinth', path: siModrinth.path},
+  {host: 'curseforge.com', label: 'curseforge', path: siCurseforge.path},
+];
+
+function storeIcon(item: NavbarItemConfig): {label: string; href: string; path: string} | null {
+  const {href, label} = item as {href?: unknown; label?: unknown};
+  if (typeof href !== 'string' || typeof label !== 'string') return null;
+  let host: string;
+  try {
+    host = new URL(href).hostname.toLowerCase();
+  } catch {
+    return null;
+  }
+  const store = STORE_ICONS.find(
+    (s) => (host === s.host || host.endsWith(`.${s.host}`)) && label.trim().toLowerCase() === s.label,
+  );
+  return store ? {label, href, path: store.path} : null;
+}
+
 function NavbarItems({items}: {items: NavbarItemConfig[]}): ReactNode {
   return (
     <>
@@ -30,10 +53,29 @@ ${JSON.stringify(item, null, 2)}`,
               {cause: error},
             )
           }>
-          <NavbarItem {...item} />
+          <NavbarItemOrIcon item={item} />
         </ErrorCauseBoundary>
       ))}
     </>
+  );
+}
+
+function NavbarItemOrIcon({item}: {item: NavbarItemConfig}): ReactNode {
+  const store = storeIcon(item);
+  if (!store) return <NavbarItem {...item} />;
+  const className = (item as {className?: string}).className;
+  return (
+    <a
+      className={clsx('navbar__item navbar__link', className, 'pbtn--icon')}
+      href={store.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={store.label}
+      title={store.label}>
+      <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
+        <path d={store.path} fill="currentColor" />
+      </svg>
+    </a>
   );
 }
 

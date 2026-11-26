@@ -101,11 +101,12 @@ function newsLink(projectId: string): NavbarItem | null {
 }
 
 // Self-hosted fonts (no Google Fonts request): Inter for --font-body, JetBrains Mono for --font-mono
-// (see custom.css). Each file holds one weight. --font-display comes from the Adobe Fonts kit below.
+// (see custom.css). Each file holds one weight. --font-hero comes from the Adobe Fonts kit below.
 const FONTS = [
   '@fontsource/inter/400.css',
   '@fontsource/inter/500.css',
   '@fontsource/inter/600.css',
+  '@fontsource/inter/700.css',
   '@fontsource/jetbrains-mono/500.css',
 ];
 
@@ -122,9 +123,14 @@ export function workshopPlugin(_context: LoadContext, opts: WorkshopOptions): Pl
     // The main instance keeps custom.css's primary and --link; a project instance overrides them with its accent.
     injectHtmlTags: () => ({
       headTags: [
-        // --font-display: the Adobe Fonts kit, which Adobe's licence requires loading from their servers.
-        {tagName: 'link', attributes: {rel: 'preconnect', href: 'https://use.typekit.net', crossorigin: ''}},
-        {tagName: 'link', attributes: {rel: 'stylesheet', href: TYPEKIT_KIT}},
+        // --font-hero (the homepage title) is the Adobe Fonts kit, which Adobe's licence requires loading
+        // from their servers. Only the main instance (no projectId) has the hero, so only it requests Adobe.
+        ...(opts.projectId
+          ? []
+          : [
+              {tagName: 'link', attributes: {rel: 'preconnect', href: 'https://use.typekit.net', crossorigin: ''}},
+              {tagName: 'link', attributes: {rel: 'stylesheet', href: TYPEKIT_KIT}},
+            ]),
         {tagName: 'style', innerHTML: css},
       ],
     }),

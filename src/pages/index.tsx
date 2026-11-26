@@ -104,9 +104,6 @@ export default function Home(): ReactNode {
               <br />
               Workshop
             </h1>
-            <div className="home-hero__bar" aria-hidden="true">
-              <div />
-            </div>
             <p className="home-hero__line">{HERO_LINE}</p>
           </div>
           <NewsStrip />
