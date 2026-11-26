@@ -5,7 +5,7 @@
 /build
 
 # Project docs, filled by npm run fetch
-projects/
+/projects/
 
 # Generated files
 .docusaurus

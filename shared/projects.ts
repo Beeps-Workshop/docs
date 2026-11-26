@@ -95,6 +95,17 @@ export const PROJECTS: Project[] = [
     accent: {light: '#3A3A42', dark: '#B4B4BC'},
     modrinthSlug: 'finitenetherite',
   },
+  {
+    id: 'le',
+    label: 'Lux Eterna',
+    short: 'Lux Eterna',
+    kind: 'mod',
+    blurb: 'Travel to The Forgotten Realm and fight to cleanse the eternal light!',
+    repo: 'Beeps-Workshop/lux-eterna',
+    branch: 'main',
+    private: true,
+    accent: {light: '#8A5A00', dark: '#F2C14E'},
+  },
 ];
 
 /**

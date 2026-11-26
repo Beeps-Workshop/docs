@@ -60,7 +60,8 @@
       {"repo": "Beeps-Workshop/bmcrm", "branch": "main", "dir": "docs", "into": "projects/bmcrm"},
       {"repo": "Beeps-Workshop/beeps-other-end", "branch": "main", "dir": "docs", "into": "projects/boe"},
       {"repo": "Beeps-Workshop/FiniteNetherite", "branch": "master", "dir": "docs", "into": "projects/fn"},
-      {"repo": "Beeps-Workshop/FixturesAndFootnotes", "branch": "main", "dir": "docs", "into": "projects/fnf"}
+      {"repo": "Beeps-Workshop/FixturesAndFootnotes", "branch": "main", "dir": "docs", "into": "projects/fnf"},
+      {"repo": "Beeps-Workshop/lux-eterna", "branch": "main", "dir": "docs", "into": "projects/le"}
     ]
   }
 }
